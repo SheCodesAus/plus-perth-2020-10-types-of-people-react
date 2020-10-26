@@ -1,0 +1,27 @@
+#event-card {
+    width: 90%;
+    height: 45vh;
+    border: 1px solid var(--grey-color);
+    padding: 10px;
+    background-color: var(--white-color);
+}
+
+#event-card-image {
+    width: 100%;
+    height: 50%;
+}
+
+#event-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+#event-card-text {
+    display: flex;
+    flex-direction: column;
+}
+
+#event-card-text i {
+    align-self: flex-end;
+}

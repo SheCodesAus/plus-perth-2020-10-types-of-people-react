@@ -1,0 +1,87 @@
+#m-profile-section-1 {
+    display: flex;
+}
+
+#m-profile-left, #m-profile-right {
+    width: 50%;
+}
+
+#m-profile-left {
+    text-align: center;
+    padding-right: 10px;
+}
+
+#m-profile-right {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+}
+
+#m-profile-image {
+    height: 30vh;
+    width: 100%;
+    object-fit: cover;
+}
+
+#m-profile-skills-container {
+    display: flex;
+}
+
+#m-profile-skills-container>* {
+    margin-right: 20px;
+}
+
+#m-profile-section-2,
+#m-profile-section-3 {
+    margin-top: 50px;
+}
+
+@media only screen and (min-width: 700px) {
+    #m-profile-sections-1-2 {
+        display: flex;
+        align-items: center;
+    }
+
+    #m-profile-section-1 {
+        flex-direction: column-reverse;
+    }
+
+    #m-profile-section-1,
+    #m-profile-section-2 {
+        width: 50%;
+    }
+    
+    #m-profile-left, #m-profile-right {
+        width: 100%;
+    }
+    
+    #m-profile-left {
+        text-align: left;
+        padding-right: 10px;
+    }
+    
+    #m-profile-right {
+        display: flex;
+        flex-direction: column;
+        padding-left: 10px;
+    }
+    
+    #m-profile-image {
+        margin-top: 30px;
+        height: 80%;
+        width: 80%;
+        object-fit: cover;
+    }
+    
+    #m-profile-skills-container {
+        display: flex;
+    }
+    
+    #m-profile-skills-container>* {
+        margin-right: 20px;
+    }
+
+    #m-profile-section-3 {
+        margin-top: 50px;
+    }
+}
