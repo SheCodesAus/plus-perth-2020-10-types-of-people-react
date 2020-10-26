@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import Navbar from "./components/Navbar/Navbar";
+import Footer from "./components/Footer/Footer"
+import HomePage from "./pages/HomePage"
+import "./App.css";
+import EventPage from "./pages/EventPage";
+import ProfilePage from "./pages/ProfilePage";
+import SignupPage from "./pages/SignupPage";
+import LoginPage from "./pages/LoginPage";
+import PostEventPage from "./pages/PostEventPage";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+      <Router>
+        <div>
+            <Navbar />
+
+            <Switch>
+                <Route path="/event/:id">
+                    <EventPage />
+                </Route>
+                <Route path="/profile/:username">
+                    <ProfilePage />
+                </Route>
+                <Route path="/signup">
+                    <SignupPage />
+                </Route>
+                <Route path="/login">
+                    <LoginPage />
+                </Route>
+                <Route path="/create-event">
+                    <PostEventPage />
+                </Route>
+                <Route path="/">
+                    <HomePage />
+                </Route>
+            </Switch>
+            <Footer />
+        </div>
+      </Router>
+    );
 }
 
 export default App;
+
