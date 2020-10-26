@@ -55,6 +55,20 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
+    margin-bottom: 20px;
+    border: 1px solid var(--grey-color);
+    /* background-color: var(--grey-color); */
+    padding: 10px;
+}
+
+.event-list-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+
+.event-list-container a {
+    align-self: center;
 }
 
 @media only screen and (min-width: 700px) {

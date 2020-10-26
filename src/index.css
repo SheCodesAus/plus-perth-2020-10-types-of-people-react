@@ -63,6 +63,16 @@ i {
   font-size: 1.9rem;
 }
 
+/* TEXT FORMATTING */
+
+.text-primary {
+  color: var(--primary-color);
+}
+
+.text-white {
+  color: var(--white-color);
+}
+
 /* BUTTONS */
 
 .btn {
