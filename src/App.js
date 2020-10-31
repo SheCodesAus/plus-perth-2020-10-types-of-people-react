@@ -9,21 +9,25 @@ import ProfilePage from "./pages/ProfilePage";
 import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PostEventPage from "./pages/PostEventPage";
+import Error404 from "./pages/Error404";
+
 
 function App() {
     return (
       <Router>
         <div>
             <Navbar />
-
             <Switch>
+                <Route path="/events">
+                    <EventPage />
+                </Route>
                 <Route path="/event/:id">
                     <EventPage />
                 </Route>
                 <Route path="/profile/:username">
                     <ProfilePage />
                 </Route>
-                <Route path="/signup">
+                <Route exact path="/signup">
                     <SignupPage />
                 </Route>
                 <Route path="/login">
@@ -32,8 +36,11 @@ function App() {
                 <Route path="/create-event">
                     <PostEventPage />
                 </Route>
-                <Route path="/">
+                <Route path="/" exact>
                     <HomePage />
+                </Route>
+                <Route>
+                    <Route path="*" exact={true} component={Error404} />
                 </Route>
             </Switch>
             <Footer />
