@@ -12,17 +12,18 @@ const PostEventForm = () => {
       })
       .then((data) => {
         setCategoryData(data);
-        console.log(data);
+        // console.log(data);
       });
   }, []);
 
   const [eventData, setEventData] = useState({
-    title: "",
-    description: "",
-    image: "",
-    location: "",
-    date: "",
-    category: "",
+    event_name: "",
+    event_description: "",
+    event_image: "",
+    event_location: "",
+    event_date: "",
+    // date_created: "",
+    categories: [""],
   });
 
   const handleChange = (e) => {
@@ -52,8 +53,9 @@ const PostEventForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Submit pressed");
-    //Have to select the first category again or it's null
-    if (eventData.title && eventData.description && eventData.date) {
+    console.log(eventData);
+    if (eventData.event_name && eventData.event_description) {
+      // console.log(eventData.event_name);
       postData().then((response) => {
         window.localStorage.setItem("title", eventData.title);
         history.push("/");
@@ -81,7 +83,7 @@ const PostEventForm = () => {
       </div>
       <div className="form-item">
         <label htmlFor="">Event Date</label>
-        <input type="datetime" id="event_date" onChange={handleChange} />
+        <input type="datetime-local" id="event_date" onChange={handleChange} />
       </div>
       <div className="form-item">
         <label htmlFor="">Location</label>

@@ -5,77 +5,103 @@ import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
 
 const MentorProfileCard = () => {
-  const [userData, setUserData] = useState();
+  const [userDataProfile, setUserDataProfile] = useState({});
+  const [userData, setUserData] = useState({});
+
   const { username } = useParams();
   let user = localStorage.username;
 
-  // DUMMY DATA - delete once API fetch is set up
-
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}users/${username}/`)
-      .then((results) => {
-        return results.json();
-      })
-      .then((data) => {
-        setUserData(data);
-      });
-  }, []);
-  console.log(userData);
-
-  const profile = {
-    // is_org: userData.is_org,
-    user: username,
-    // email: userData.email,
-    // name: "Jane Doe",
-    bio:
-      "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus corrupti sit recusandae sapiente rem? Placeat harum cupiditate laudantium corrupti ratione magnam quia quo. Ad consequuntur odio rerum impedit. Perferendis natus magnam nemo quia quod quas esse quibusdam beatae nesciunt. Animi in, nulla perferendis asperiores reprehenderit natus, quo sint, repellendus accusantium consectetur minus? Quia officiis repellendus assumenda laborum voluptas? Nostrum, ullam iusto assumenda rerum adipisci consequatur repellendus consequuntur aliquam autem esse aliquid voluptate sapiente consectetur ea nam eum quam tempore molestias!",
-    image:
-      "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
-    skills: ["Python", "JavaScript"],
+  const fetchUser = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}users/${username}/`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      setUserData(data);
+      console.log(data);
+      return;
+    }
+    const data = await response.json();
   };
 
-  const eventsMentoredAt = [
-    {
-      id: 1,
-      event_name: "SheCodes Python Workshop",
-      event_description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-      event_image:
-        "https://cdn.pixabay.com/photo/2015/01/08/18/24/programming-593312_960_720.jpg",
-      event_location: "Riff",
-      organiser: "She Codes",
-      category: "Python",
-      event_date: "Dec 12, 2019",
-    },
-    {
-      id: 2,
-      event_name: "SheCodes Junior JavaScript Workshop",
-      event_description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-      event_image:
-        "https://cdn.pixabay.com/photo/2015/01/08/18/24/children-593313_960_720.jpg",
-      event_location: "Flux",
-      organiser: "She Codes",
-      category: "JavaScript",
-      event_date: "Mar 20, 2019",
-    },
-    {
-      id: 3,
-      event_name: "SheCodes One-Day Workshop",
-      event_description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-      event_image:
-        "https://cdn.pixabay.com/photo/2017/01/12/10/40/school-1974369_960_720.jpg",
-      event_location: "Riff",
-      organiser: "She Codes",
-      category: "Python",
-      event_date: "Jan 9, 2019",
-    },
-  ];
+  const fetchMentor = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      setUserDataProfile(data);
+      console.log(data);
+      return;
+    }
+    const data = await response.json();
+  };
+
+  useEffect(() => {
+    fetchUser();
+    fetchMentor();
+  }, []);
+
+  //   console.log("userData:", userData);
+  //   console.log("mentorprofile:", userData.mentor_profile);
+  //   console.log(userData.email);
+  const profile = {
+    // is_org: userData.is_org,
+    // user: userData.username,
+    email: userData.email,
+    name: userDataProfile.name,
+    // "Jane Doe",
+    bio: userDataProfile.bio,
+    //   "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus corrupti sit recusandae sapiente rem? Placeat harum cupiditate laudantium corrupti ratione magnam quia quo. Ad consequuntur odio rerum impedit. Perferendis natus magnam nemo quia quod quas esse quibusdam beatae nesciunt. Animi in, nulla perferendis asperiores reprehenderit natus, quo sint, repellendus accusantium consectetur minus? Quia officiis repellendus assumenda laborum voluptas? Nostrum, ullam iusto assumenda rerum adipisci consequatur repellendus consequuntur aliquam autem esse aliquid voluptate sapiente consectetur ea nam eum quam tempore molestias!",
+    image:
+      "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
+    skills:
+      // ["Python", "JavaScript"],
+      userDataProfile.skills,
+  };
+
+  //   const eventsMentoredAt = [
+  //     {
+  //       id: 1,
+  //       event_name: "SheCodes Python Workshop",
+  //       event_description:
+  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
+  //       event_image:
+  //         "https://cdn.pixabay.com/photo/2015/01/08/18/24/programming-593312_960_720.jpg",
+  //       event_location: "Riff",
+  //       organiser: "She Codes",
+  //       category: "Python",
+  //       event_date: "Dec 12, 2019",
+  //     },
+  //     {
+  //       id: 2,
+  //       event_name: "SheCodes Junior JavaScript Workshop",
+  //       event_description:
+  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
+  //       event_image:
+  //         "https://cdn.pixabay.com/photo/2015/01/08/18/24/children-593313_960_720.jpg",
+  //       event_location: "Flux",
+  //       organiser: "She Codes",
+  //       category: "JavaScript",
+  //       event_date: "Mar 20, 2019",
+  //     },
+  //     {
+  //       id: 3,
+  //       event_name: "SheCodes One-Day Workshop",
+  //       event_description:
+  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
+  //       event_image:
+  //         "https://cdn.pixabay.com/photo/2017/01/12/10/40/school-1974369_960_720.jpg",
+  //       event_location: "Riff",
+  //       organiser: "She Codes",
+  //       category: "Python",
+  //       event_date: "Jan 9, 2019",
+  //     },
+  //   ];
 
   // fetch events mentored at and replace state value here:
-  const [events, setEvents] = useState(eventsMentoredAt);
-  const skillIcons = retrieveIcons(profile.skills).map((icon) => <>{icon}</>);
+  //   const [events, setEvents] = useState(eventsMentoredAt);
+  //   const skillIcons = retrieveIcons(profile.skills).map((icon) => <>{icon}</>);
 
   function IsOwnerCanEdit() {
     user = window.localStorage.getItem("username");
@@ -106,10 +132,11 @@ const MentorProfileCard = () => {
           </div>
 
           <div id="m-profile-right">
-            <h1>{profile.user}</h1>
-            {/* <p>Email: {profile.email}</p> */}
+            <h1>{profile.name}</h1>
+            <h2>{profile.user}</h2>
+            <p>Email: {profile.email}</p>
             <IsOwnerCanEdit />
-            <div id="m-profile-skills-container">{skillIcons}</div>
+            {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
           </div>
         </div>
         <div id="m-profile-section-2">
@@ -117,14 +144,24 @@ const MentorProfileCard = () => {
           <p>{profile.bio}</p>
         </div>
       </div>
-      <div id="m-profile-section-3">
+      <div>
+        {/* {userDataProfile == null && (
+        <div>
+          {userDataProfile.name}: " ", {userDataProfile.bio}: "
+          ",
+          {userDataProfile.skills}=" "
+          <h2>There is no user profile set up for an admin user </h2>
+        </div>
+      )} */}
+      </div>
+      {/* <div id="m-profile-section-3">
         <h3>Events I've mentored at</h3>
         <div className="event-grid">
           {events.map((event) => {
             return <EventCard event={event} />;
           })}
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

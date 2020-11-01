@@ -10,6 +10,10 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from "./pages/LoginPage";
 import PostEventPage from "./pages/PostEventPage";
 import Error404 from "./pages/Error404";
+import EditProfileForm from "./pages/EditProfilePage";
+import DeleteUserPage from "./pages/DeleteUserPage";
+import EditEventPage from "./pages/EditEventPage";
+import DeleteEventPage from "./pages/DeleteEventPage";
 
 
 function App() {
@@ -18,11 +22,20 @@ function App() {
         <div>
             <Navbar />
             <Switch>
-                <Route path="/events">
+                <Route path="/events/:id/edit">
+                    <EditEventPage />
+                </Route>
+                <Route path="/events/:id/delete">
+                    <DeleteEventPage />
+                </Route>
+                <Route path="/events/:id">
                     <EventPage />
                 </Route>
-                <Route path="/event/:id">
-                    <EventPage />
+                <Route path="/profile/:username/edit">
+                    <EditProfileForm />
+                </Route>
+                <Route path="/profile/:username/delete">
+                    <DeleteUserPage />
                 </Route>
                 <Route path="/profile/:username">
                     <ProfilePage />
