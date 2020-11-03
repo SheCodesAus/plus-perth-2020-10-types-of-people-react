@@ -11,6 +11,12 @@ const retrieveIcon = (category) => {
     } else if (category === "HTML") {
         let icon = <i class="fas fa-code fa-2x"></i>
         categoryIcon = icon
+    } else if (category === "CSS") {
+        let icon = <i class="fas fa-code fa-2x"></i>
+        categoryIcon = icon
+    } else if (category === "React") {
+        let icon = <i class="fas fa-code fa-2x"></i>
+        categoryIcon = icon
     } else {
         let icon = <i class="far fa-file-code fa-2x"></i>
         categoryIcon = icon
