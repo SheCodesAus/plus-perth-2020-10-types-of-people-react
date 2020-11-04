@@ -3,14 +3,29 @@ import { useHistory } from "react-router-dom";
 
 const SignupForm = () => {
   // function SignupForm() {
-  const history = useHistory();
 
   const [credentials, setCredentials] = useState({
     username: "",
     email: "",
     password: "",
-    is_org: "",
+    is_org: false,
   });
+
+  const history = useHistory();
+
+  const isChecked = (event) => {
+    console.log(event.target.checked)
+    event.target.checked? 
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      is_org: true,
+    })): 
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      is_org: false,
+    }))
+    console.log('woo')
+  }
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -21,6 +36,7 @@ const SignupForm = () => {
   };
 
   const postData = async () => {
+    console.log(process.env.REACT_APP_API_URL)
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}users/register/`,
       {
@@ -29,7 +45,8 @@ const SignupForm = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(credentials),
-      }
+      },
+      console.log(credentials)
     );
     return response.json();
   };
@@ -42,7 +59,7 @@ const SignupForm = () => {
         console.log(response);
         window.localStorage.setItem("username", credentials.username);
         console.log("username:", credentials.username);
-        history.push("/login");
+        history.push("/profile/:username");
       });
     }
     // }
@@ -83,7 +100,7 @@ const SignupForm = () => {
       </div> */}
       <div className="form-item">
         <label htmlFor="is_org">Organisation?</label>
-        <input type="checkbox" id="is_org" onChange={handleChange} />
+        <input type="checkbox" id="is_org" onChange={(event)=>{isChecked(event)}} />
       </div>
       <button className="btn" type="submit" onClick={handleSubmit}>
         Sign up

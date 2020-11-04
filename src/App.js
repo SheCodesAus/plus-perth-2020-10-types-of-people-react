@@ -37,7 +37,7 @@ function App() {
                 <Route path="/profile/:username/delete">
                     <DeleteUserPage />
                 </Route>
-                <Route path="/profile/:username">
+                <Route exact path="/profile/:username">
                     <ProfilePage />
                 </Route>
                 <Route exact path="/signup">
@@ -49,7 +49,7 @@ function App() {
                 <Route path="/create-event">
                     <PostEventPage />
                 </Route>
-                <Route path="/" exact>
+                <Route exact path="/">
                     <HomePage />
                 </Route>
                 <Route>
