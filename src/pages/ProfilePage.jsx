@@ -18,7 +18,7 @@ const ProfilePage = (props) => {
   //   // false;
   // };
   // console.log("this", userData);
-  // console.log(userData.is_org);
+  console.log(props);
 
   return (
     <div id="profile-page" className="container">

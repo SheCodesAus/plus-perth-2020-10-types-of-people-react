@@ -11,17 +11,12 @@ function EditProfileFrom(props) {
   const [credentials, setCredentials] = useState({
     username: "",
     email: "",
-    // password: "",
-    // company_name: "",
-    // org_bio: "",
-    // contact_name: "",
   });
   const [public_profile, setPublic_profile] = useState({
     company_name: "",
     org_bio: "",
     contact_name: "",
   });
-  // console.log(credentials);
 
   useEffect(() => {
     setCredentials({
@@ -31,14 +26,13 @@ function EditProfileFrom(props) {
     setPublic_profile({
       company_name:
         //undefined or null
-        userDataProfile === undefined ? " " : userDataProfile.company_name,
-      // userDataProfile.company_name,
+        userDataProfile === null ? " " : userDataProfile.company_name,
       contact_name:
-        userDataProfile === undefined ? " " : userDataProfile.contact_name,
-      org_bio: userDataProfile === undefined ? " " : userDataProfile.org_bio,
+        userDataProfile === null ? " " : userDataProfile.contact_name,
+      org_bio: userDataProfile === null ? " " : userDataProfile.org_bio,
     });
   }, [userData, userDataProfile]);
-  console.log("profiel", public_profile);
+  // console.log("profile", public_profile);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -51,20 +45,12 @@ function EditProfileFrom(props) {
       [id]: value,
     }));
   };
-  // const handleChange_public = (e) => {
-  //   const { id, value } = e.target;
-  //   setPublic_profile((prevCredentials) => ({
-  //     ...prevCredentials,
-  //     [id]: value,
-  //   }));
-  // };
 
   const editData = async () => {
     let token = window.localStorage.getItem("token");
     let username = localStorage.username;
 
     const response1 = await fetch(
-      // `${process.env.REACT_APP_API_URL}users/${userData.username}`,
       `${process.env.REACT_APP_API_URL}users/${username}/`,
       {
         method: "put",
@@ -83,7 +69,7 @@ function EditProfileFrom(props) {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify(credentials),
+        body: JSON.stringify(public_profile),
       }
     );
     return response.json();
@@ -103,11 +89,6 @@ function EditProfileFrom(props) {
   };
 
   return (
-    // <>
-    //   {isBusy ? (
-    // <Loader />
-    // <p>loading</p>
-    // ) : (
     <form className="form">
       <div className="form-item">
         <label htmlFor="username">Username:</label>
@@ -132,7 +113,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="company_name"
-          value={public_profile.company_name}
+          defaultValue={public_profile.company_name}
           onChange={handleChange}
         />
       </div>
@@ -141,7 +122,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="contact_name"
-          value={public_profile.contact_name}
+          defaultValue={public_profile.contact_name}
           onChange={handleChange}
         />
       </div>
@@ -150,7 +131,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="org_bio"
-          value={public_profile.org_bio}
+          defaultValue={public_profile.org_bio}
           onChange={handleChange}
         />
       </div>
@@ -167,8 +148,6 @@ function EditProfileFrom(props) {
         Update Account
       </button>
     </form>
-    // )}
-    // </>
   );
 }
 
