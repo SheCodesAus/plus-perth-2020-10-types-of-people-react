@@ -5,8 +5,7 @@ import EditEventForm from "../components/EditEventForm";
 function EditEventPage() {
   const [LoggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
-  let username = localStorage.username;
-  username = window.localStorage.getItem("username");
+  let username = window.localStorage.getItem("username");
   const [isBusy, setBusy] = useState(true);
 
   useEffect(() => {
@@ -16,16 +15,6 @@ function EditEventPage() {
 
   const [eventData, setEventData] = useState();
   const { id } = useParams();
-
-  //   useEffect(() => {
-  //     fetch(`${process.env.REACT_APP_API_URL}events/${id}/`)
-  //       .then((results) => {
-  //         return results.json();
-  //       })
-  //       .then((data) => {
-  //         setEventData(data);
-  //       });
-  //   }, []);
 
   const fetchEvent = async () => {
     const response = await fetch(
@@ -49,7 +38,6 @@ function EditEventPage() {
     fetchEvent();
   }, []);
 
-  console.log(eventData);
   return (
     <div>
       {isBusy ? (
