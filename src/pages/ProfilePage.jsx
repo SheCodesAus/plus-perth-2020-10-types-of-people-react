@@ -1,29 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
 import EventCard from "../components/EventCard/EventCard";
 import MentorProfileCard from "../components/MentorProfileCard/MentorProfileCard";
 import OrgProfileCard from "../components/OrgProfileCard/OrgProfileCard";
 
-const ProfilePage = (props) => {
-  // Fetch user details and put is_org value into isOrg
-  // DUMMY DATA - delete once API fetch is set up
-  const [isOrg, setIsOrg] = useState(false);
-  const { userData } = props;
+const ProfilePage = () => {
+  // const [isOrg, setIsOrg] = useState(false);
+  const [userData, setUserData] = useState({});
+  let user = localStorage.username;
+  const [isBusy, setBusy] = useState(true);
+  const { username } = useParams();
 
-  // const Is_organisation = () => {
-  //   if (userData.is_org) {
-  //     console.log("open is true", isOrg);
-  //     //true
-  //     return setIsOrg(true);
-  //   }
-  //   // false;
-  // };
-  // console.log("this", userData);
-  // console.log(userData.is_org);
+  const fetchUser = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}users/${username}/`
+    );
+    if (response.ok) {
+      console.log(response);
+      const data = await response.json();
+      if (data) {
+        setUserData(data);
+        console.log(data);
+        setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   return (
     <div id="profile-page" className="container">
-      {/* {isOrg ? <OrgProfileCard /> : <MentorProfileCard />} */}
-      <OrgProfileCard />
+      {isBusy ? (
+        <p>loading</p>
+      ) : userData.is_org ? (
+        <OrgProfileCard props={userData} />
+      ) : (
+        <MentorProfileCard props={userData} />
+      )}
     </div>
   );
 };

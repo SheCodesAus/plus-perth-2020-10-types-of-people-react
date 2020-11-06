@@ -4,25 +4,28 @@ import EventCard from "../../components/EventCard/EventCard";
 import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
 
-const MentorProfileCard = () => {
-  const [userDataProfile, setUserDataProfile] = useState({});
-  const [userData, setUserData] = useState({});
+const MentorProfileCard = (props) => {
+  // console.log(props.props);
+  const [MentorDataProfile, setMentorDataProfile] = useState({});
+  let user = window.localStorage.getItem("username");
+
+  // const [userData, setUserData] = useState({});
 
   const { username } = useParams();
-  let user = localStorage.username;
+  // let user = localStorage.username;
 
-  const fetchUser = async () => {
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/${username}/`
-    );
-    if (response.ok) {
-      const data = await response.json();
-      setUserData(data);
-      console.log(data);
-      return;
-    }
-    const data = await response.json();
-  };
+  // const fetchUser = async () => {
+  //   const response = await fetch(
+  //     `${process.env.REACT_APP_API_URL}users/${username}/`
+  //   );
+  //   if (response.ok) {
+  //     const data = await response.json();
+  //     setUserData(data);
+  //     console.log(data);
+  //     return;
+  //   }
+  //   const data = await response.json();
+  // };
 
   const fetchMentor = async () => {
     const response = await fetch(
@@ -30,7 +33,7 @@ const MentorProfileCard = () => {
     );
     if (response.ok) {
       const data = await response.json();
-      setUserDataProfile(data);
+      setMentorDataProfile(data);
       console.log(data);
       return;
     }
@@ -38,26 +41,18 @@ const MentorProfileCard = () => {
   };
 
   useEffect(() => {
-    fetchUser();
     fetchMentor();
   }, []);
 
-  //   console.log("userData:", userData);
-  //   console.log("mentorprofile:", userData.mentor_profile);
-  //   console.log(userData.email);
-  const profile = {
-    // is_org: userData.is_org,
-    // user: userData.username,
-    email: userData.email,
-    name: userDataProfile.name,
-    // "Jane Doe",
-    bio: userDataProfile.bio,
-    //   "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ducimus corrupti sit recusandae sapiente rem? Placeat harum cupiditate laudantium corrupti ratione magnam quia quo. Ad consequuntur odio rerum impedit. Perferendis natus magnam nemo quia quod quas esse quibusdam beatae nesciunt. Animi in, nulla perferendis asperiores reprehenderit natus, quo sint, repellendus accusantium consectetur minus? Quia officiis repellendus assumenda laborum voluptas? Nostrum, ullam iusto assumenda rerum adipisci consequatur repellendus consequuntur aliquam autem esse aliquid voluptate sapiente consectetur ea nam eum quam tempore molestias!",
+  const mentor_profile = {
+    is_org: props.props.is_org,
+    username: props.props.username,
+    email: props.props.email,
+    name: MentorDataProfile.name,
+    bio: MentorDataProfile.bio,
     image:
       "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
-    skills:
-      // ["Python", "JavaScript"],
-      userDataProfile.skills,
+    skills: MentorDataProfile.skills,
   };
 
   //   const eventsMentoredAt = [
@@ -101,10 +96,9 @@ const MentorProfileCard = () => {
 
   // fetch events mentored at and replace state value here:
   //   const [events, setEvents] = useState(eventsMentoredAt);
-  //   const skillIcons = retrieveIcons(profile.skills).map((icon) => <>{icon}</>);
+  // const skillIcons = retrieveIcons(mentor_profile.skills).map((icon) => <>{icon}</>);
 
   function IsOwnerCanEdit() {
-    user = window.localStorage.getItem("username");
     // if (username != null) {
     if (user === username) {
       return (
@@ -128,20 +122,24 @@ const MentorProfileCard = () => {
       <div id="m-profile-sections-1-2">
         <div id="m-profile-section-1">
           <div id="m-profile-left">
-            <img id="m-profile-image" src={profile.image} alt={profile.user} />
+            <img
+              id="m-profile-image"
+              src={mentor_profile.image}
+              alt={mentor_profile.user}
+            />
           </div>
 
           <div id="m-profile-right">
-            <h1>{profile.name}</h1>
-            <h2>{profile.user}</h2>
-            <p>Email: {profile.email}</p>
+            <h1>{mentor_profile.name}</h1>
+            <h2>{mentor_profile.user}</h2>
+            <p>Email: {mentor_profile.email}</p>
             <IsOwnerCanEdit />
             {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
           </div>
         </div>
         <div id="m-profile-section-2">
           <h3>Bio</h3>
-          <p>{profile.bio}</p>
+          <p>{mentor_profile.bio}</p>
         </div>
       </div>
       <div>

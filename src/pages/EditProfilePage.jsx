@@ -5,8 +5,10 @@ import EditMentorProfileForm from "../components/MentorProfileCard/EditMentorPro
 
 function EditProfilePage() {
   const [userData, setUserData] = useState({});
+  const [userDataProfile, setUserDataProfile] = useState({});
   //   const [userDataProfile, setUserDataProfile] = useState({});
   const [isOrg, setIsOrg] = useState(false);
+  const [isBusy, setBusy] = useState(true);
 
   const { username } = useParams();
   const [LoggedIn, setLoggedIn] = useState(false);
@@ -19,32 +21,89 @@ function EditProfilePage() {
     token != null ? setLoggedIn(true) : setLoggedIn(false);
   }, [location]);
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}users/${username}/`)
-      .then((results) => {
-        return results.json();
-      })
-      .then((data) => {
+  const fetchUser = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}users/${username}/`
+    );
+    if (response.ok) {
+      console.log(response);
+      const data = await response.json();
+
+      if (data) {
         setUserData(data);
-      });
+        console.log(data);
+        setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
+
+  const fetchOrgProfile = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}users/org/${username_ST}/profile/`
+    );
+    if (response.ok) {
+      console.log(response);
+      const data = await response.json();
+
+      if (data) {
+        setUserDataProfile(data);
+        console.log(data);
+        setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
+  const fetchMentorProfile = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}users/org/${username_ST}/profile/`
+    );
+    if (response.ok) {
+      console.log(response);
+      const data = await response.json();
+
+      if (data) {
+        setUserDataProfile(data);
+        console.log(data);
+        setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
+
+  useEffect(() => {
+    fetchUser();
+    fetchMentorProfile();
+    fetchOrgProfile();
   }, []);
 
   return (
     <div>
-      {LoggedIn && username_ST == username ? (
+      {isBusy ? (
+        <p>loading</p>
+      ) : LoggedIn && username_ST == username ? (
         <>
-          <p>Logged in as {username} </p>
           {isOrg ? (
-            <EditOrgProfileForm userData={userData} />
+            <EditOrgProfileForm
+              userData={userData}
+              userDataProfile={userDataProfile}
+            />
           ) : (
-            <EditOrgProfileForm userData={userData} />
-
-            // <EditMentorProfileForm userData={userData} />
+            <EditOrgProfileForm
+              userData={userData}
+              userDataProfile={userDataProfile}
+            />
+            // <EditMentorProfileForm
+            // userData={userData}
+            // userDataProfile={userDataProfile}
           )}
         </>
       ) : (
         <>
-          <p>Login to edit a user profile </p>
+          <p>Login to create or edit a event </p>
         </>
       )}
     </div>

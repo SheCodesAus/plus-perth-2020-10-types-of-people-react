@@ -22,9 +22,9 @@ function EditProfileFrom(props) {
       email: userData.email,
     });
     SetPublic_profile({
-      bio: userDataProfile === null ? " " : userData.mentor_profile.bio,
-      name: userDataProfile === null ? " " : userData.mentor_profile.name,
-      skills: userDataProfile === null ? " " : userData.mentor_profile.skills,
+      bio: userDataProfile === null ? " " : userDataProfile.bio,
+      name: userDataProfile === null ? " " : userDataProfile.name,
+      skills: userDataProfile === null ? " " : userDataProfile.skills,
     });
   }, [userData, userDataProfile]);
 
@@ -43,7 +43,6 @@ function EditProfileFrom(props) {
   const editData = async () => {
     let token = window.localStorage.getItem("token");
     let username = localStorage.username;
-    console.log(username);
 
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}users/${userData.username}`,
@@ -107,7 +106,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="name"
-          value={public_profile.name}
+          defaultValue={public_profile.name}
           onChange={handleChange}
         />
       </div>
@@ -116,7 +115,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="bio"
-          value={public_profile.bio}
+          defaultValue={public_profile.bio}
           onChange={handleChange}
         />
       </div>
