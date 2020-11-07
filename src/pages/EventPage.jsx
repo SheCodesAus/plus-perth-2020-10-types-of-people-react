@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
+import AddToCalendar from 'react-add-to-calendar';
 
 const EventPage = () => {
   const { id } = useParams();
@@ -31,6 +32,19 @@ const EventPage = () => {
   }, []);
   // console.log(id);
 
+
+  const generateCalendar = (eventData) => {
+    const event = {
+      title: eventData.event_name,
+      description: eventData.event_description,
+      location: eventData.description,
+      startTime: eventData.event_start,
+      endTime: eventData.event_end
+    }
+    
+      return <AddToCalendar event={event}/>;
+  }
+
   function IsOwnerCanEdit() {
     username = window.localStorage.getItem("username");
     // if (username != null && projectData.owner != null) {
@@ -53,68 +67,6 @@ const EventPage = () => {
     // }
   };
 
-  var gapi = window.gapi
-    var CLIENT_ID = "386459840730-gseilbtrjdhfd9fk1qmsg9nlkqefpova.apps.googleusercontent.com"
-    var API_KEY = "AIzaSyBZb0EU63zw3l-gx-vb7ZjfKfp5zM6WRZY"
-    var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
-    var SCOPES = "https://www.googleapis.com/auth/calendar.events"
-    
-    const AddToCalendar = () => {
-        gapi.load('client:auth2', () => {
-          console.log('loaded client')
-    
-          gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES,
-          })
-    
-          gapi.client.load('calendar', 'v3')
-    
-          gapi.auth2.getAuthInstance().signIn()
-          .then(() => {
-            
-            var event = {
-              'summary': eventData.event_name,
-              'location': eventData.event_location,
-              'description': eventData.event_description,
-            
-              'start': {
-                'dateTime': eventData.event_start,
-                'timeZone': 'Australia/Perth'
-              },
-              'end': {
-                'dateTime': eventData.event_end,
-                'timeZone': 'Australia/Perth',
-              },
-            }
-            
-            var request = gapi.client.calendar.events.insert({
-              'calendarId': 'primary',
-              'resource': event,
-            })
-    
-    
-            request.execute(event => {
-              window.open(event.htmlLink)
-            })
-            
-    
-            gapi.client.calendar.events.list({
-              'calendarId': 'primary',
-              'timeMin': (new Date()).toISOString(),
-              'showDeleted': false,
-              'singleEvents': true,
-              'maxResults': 5,
-              'orderBy': 'startTime'
-            }).then(response => {
-              const events = response.result.items
-            })    
-          })
-        })
-
-    };
 
 
   return (
@@ -131,8 +83,7 @@ const EventPage = () => {
             <img src={eventData.event_image} alt="event image" />
           </div>
           <p>{eventData.event_description}</p>
-
-          <button onClick={AddToCalendar}>Add Event to Google Calendar</button>
+          {generateCalendar(eventData)}
         </div>
       )}
     </>
