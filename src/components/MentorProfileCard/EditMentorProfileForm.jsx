@@ -3,7 +3,8 @@ import { useHistory } from "react-router-dom";
 
 function EditProfileFrom(props) {
   const history = useHistory();
-  const { userData, userDataProfile } = props;
+  const { userData, mentorDataProfile } = props;
+  let username = localStorage.username;
 
   const [credentials, setCredentials] = useState({
     username: "",
@@ -13,7 +14,7 @@ function EditProfileFrom(props) {
   const [public_profile, SetPublic_profile] = useState({
     name: "",
     bio: "",
-    skills: "",
+    // skills: "",
   });
 
   useEffect(() => {
@@ -22,11 +23,11 @@ function EditProfileFrom(props) {
       email: userData.email,
     });
     SetPublic_profile({
-      bio: userDataProfile === null ? " " : userDataProfile.bio,
-      name: userDataProfile === null ? " " : userDataProfile.name,
-      skills: userDataProfile === null ? " " : userDataProfile.skills,
+      bio: mentorDataProfile === null ? " " : mentorDataProfile.bio,
+      name: mentorDataProfile === undefined ? " " : mentorDataProfile.name,
+      // skills: mentorDataProfile === undefined ? " " : mentorDataProfile.skills,
     });
-  }, [userData, userDataProfile]);
+  }, [userData, mentorDataProfile]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -44,8 +45,8 @@ function EditProfileFrom(props) {
     let token = window.localStorage.getItem("token");
     let username = localStorage.username;
 
-    const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/${userData.username}`,
+    const response1 = await fetch(
+      `${process.env.REACT_APP_API_URL}users/${username}/`,
       {
         method: "put",
         headers: {
@@ -55,7 +56,7 @@ function EditProfileFrom(props) {
         body: JSON.stringify(credentials),
       }
     );
-    const response2 = await fetch(
+    const response = await fetch(
       `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`,
       {
         method: "put",
@@ -76,7 +77,7 @@ function EditProfileFrom(props) {
       editData().then((response) => {
         console.log(response);
         // window.localStorage.setItem("username", credentials.username);
-        history.push(`profile/${userData.username}/`);
+        history.push(`/profile/${username}`);
       });
     }
   };

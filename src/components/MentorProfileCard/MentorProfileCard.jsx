@@ -5,41 +5,26 @@ import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
 
 const MentorProfileCard = (props) => {
-  // console.log(props.props);
-  const [MentorDataProfile, setMentorDataProfile] = useState({});
+  const [mentorDataProfile, setMentorDataProfile] = useState({});
   let user = window.localStorage.getItem("username");
-
-  // const [userData, setUserData] = useState({});
-
-  const { username } = useParams();
-  // let user = localStorage.username;
-
-  // const fetchUser = async () => {
-  //   const response = await fetch(
-  //     `${process.env.REACT_APP_API_URL}users/${username}/`
-  //   );
-  //   if (response.ok) {
-  //     const data = await response.json();
-  //     setUserData(data);
-  //     console.log(data);
-  //     return;
-  //   }
-  //   const data = await response.json();
-  // };
+  const [isBusy, setBusy] = useState(true);
 
   const fetchMentor = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`
+      `${process.env.REACT_APP_API_URL}users/mentor/${props.props.username}/profile/`
     );
     if (response.ok) {
+      // console.log(response);
       const data = await response.json();
-      setMentorDataProfile(data);
-      console.log(data);
+      if (data) {
+        setMentorDataProfile(data);
+        // console.log(data);
+        setBusy(false);
+      }
       return;
     }
     const data = await response.json();
   };
-
   useEffect(() => {
     fetchMentor();
   }, []);
@@ -48,11 +33,12 @@ const MentorProfileCard = (props) => {
     is_org: props.props.is_org,
     username: props.props.username,
     email: props.props.email,
-    name: MentorDataProfile.name,
-    bio: MentorDataProfile.bio,
+    name: mentorDataProfile.name,
+    bio: mentorDataProfile.bio,
     image:
       "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
-    skills: MentorDataProfile.skills,
+    // mentorDataProfile.image,
+    skills: mentorDataProfile.skills,
   };
 
   //   const eventsMentoredAt = [
@@ -100,13 +86,13 @@ const MentorProfileCard = (props) => {
 
   function IsOwnerCanEdit() {
     // if (username != null) {
-    if (user === username) {
+    if (user === mentor_profile.username) {
       return (
         <div id="owner-links">
-          <Link to={`/profile/${username}/edit`}>
+          <Link to={`/profile/${user}/edit`}>
             <p>Edit</p>
           </Link>
-          <Link to={`/profile/${username}/delete`}>
+          <Link to={`/profile/${user}/delete`}>
             <p>Delete</p>
           </Link>
         </div>
@@ -116,50 +102,71 @@ const MentorProfileCard = (props) => {
     }
     // }
   }
-
   return (
     <>
-      <div id="m-profile-sections-1-2">
-        <div id="m-profile-section-1">
-          <div id="m-profile-left">
-            <img
-              id="m-profile-image"
-              src={mentor_profile.image}
-              alt={mentor_profile.user}
-            />
+      {isBusy ? (
+        <p>loading</p>
+      ) : (
+        <>
+          <div id="profile-exist">
+            {(mentorDataProfile.name === null ||
+              mentorDataProfile.name === undefined) &&
+            // mentorDataProfile.skills.length == 0 &&
+            // (mentor_profile.image === null ||
+            //   mentor_profile.image === undefined) &&
+            (mentor_profile.bio === null ||
+              mentor_profile.bio === undefined) ? (
+              <div>
+                <h2>{mentor_profile.username}</h2>
+                <h2>There is no user profile set up for this user </h2>
+                {user === mentor_profile.username ? (
+                  <>
+                    <p>Tell us about yourself and your skills</p>
+                    <IsOwnerCanEdit />
+                    <br></br>
+                    <p>Email: {mentor_profile.email}</p>
+                  </>
+                ) : (
+                  <p></p>
+                )}
+              </div>
+            ) : (
+              <>
+                <div id="m-profile-sections-1-2">
+                  <div id="m-profile-section-1">
+                    <div id="m-profile-left">
+                      <img
+                        id="m-profile-image"
+                        src={mentor_profile.image}
+                        alt={mentor_profile.username}
+                      />
+                    </div>
+                    <div id="m-profile-right">
+                      <h1>{mentor_profile.name}</h1>
+                      <IsOwnerCanEdit />
+                      <h2>{mentor_profile.username}</h2>
+                      <p>Email: {mentor_profile.email}</p>
+                      {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
+                    </div>
+                  </div>
+                  <div id="m-profile-section-2">
+                    <h3>Bio</h3>
+                    <p>{mentor_profile.bio}</p>
+                  </div>
+                </div>
+                {/* <div id="m-profile-section-3">
+//   <h3>Events I've mentored at</h3>
+//   <div className="event-grid">
+//     {events.map((event) => {
+//       return <EventCard event={event} />;
+//     })}
+//   </div>
+// </div> */}
+              </>
+            )}
           </div>
-
-          <div id="m-profile-right">
-            <h1>{mentor_profile.name}</h1>
-            <h2>{mentor_profile.user}</h2>
-            <p>Email: {mentor_profile.email}</p>
-            <IsOwnerCanEdit />
-            {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
-          </div>
-        </div>
-        <div id="m-profile-section-2">
-          <h3>Bio</h3>
-          <p>{mentor_profile.bio}</p>
-        </div>
-      </div>
-      <div>
-        {/* {userDataProfile == null && (
-        <div>
-          {userDataProfile.name}: " ", {userDataProfile.bio}: "
-          ",
-          {userDataProfile.skills}=" "
-          <h2>There is no user profile set up for an admin user </h2>
-        </div>
-      )} */}
-      </div>
-      {/* <div id="m-profile-section-3">
-        <h3>Events I've mentored at</h3>
-        <div className="event-grid">
-          {events.map((event) => {
-            return <EventCard event={event} />;
-          })}
-        </div>
-      </div> */}
+        </>
+      )}
     </>
   );
 };
