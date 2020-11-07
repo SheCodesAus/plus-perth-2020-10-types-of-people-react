@@ -1,13 +1,32 @@
-import React from 'react'
-import LoginForm from '../components/LoginForm/LoginForm'
+import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import LoginForm from "../components/LoginForm/LoginForm";
 
 const LoginPage = () => {
-    return (
-        <div id="login-page" className="container">
-            <h1>Log in</h1>
-            <LoginForm />
-        </div>
-    )
-}
+  const [LoggedIn, setLoggedIn] = useState(false);
+  const location = useLocation();
+  let username = localStorage.username;
+  username = window.localStorage.getItem("username");
 
-export default LoginPage
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+    token != null ? setLoggedIn(true) : setLoggedIn(false);
+  }, [location]);
+
+  return (
+    <div id="login-page" className="container">
+      {!LoggedIn ? (
+        <>
+          <h1>Log in</h1>
+          <LoginForm />
+        </>
+      ) : (
+        <>
+          <p>You're already logged in as {username} </p>
+        </>
+      )}
+    </div>
+  );
+};
+
+export default LoginPage;
