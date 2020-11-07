@@ -6,12 +6,12 @@ function EditProfileFrom(props) {
   const history = useHistory();
   const { userData, userDataProfile } = props;
   let username = localStorage.username;
-  // const [isBusy, setBusy] = useState(true);
 
   const [credentials, setCredentials] = useState({
     username: "",
     email: "",
   });
+
   const [public_profile, setPublic_profile] = useState({
     company_name: "",
     org_bio: "",
@@ -83,7 +83,7 @@ function EditProfileFrom(props) {
         // setBusy(false);
         console.log(response);
         // window.localStorage.setItem("username", credentials.username);
-        history.push(`profile/${username}`);
+        history.push(`/profile/${username}`);
       });
     }
   };

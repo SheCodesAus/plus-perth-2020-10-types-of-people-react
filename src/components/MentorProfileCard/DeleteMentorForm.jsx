@@ -4,7 +4,6 @@ import "./MentorProfileCard.css";
 
 function DeleteUserFrom(props) {
   const history = useHistory();
-
   const { username } = useParams();
 
   const editData = async () => {
@@ -34,7 +33,7 @@ function DeleteUserFrom(props) {
   };
   return (
     <form>
-      <p>Are you sure you want to delete? </p>
+      <p>Are you sure you want to delete your account? </p>
       <button type="submit" onClick={handleSubmit}>
         Delete User
       </button>

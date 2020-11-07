@@ -6,7 +6,7 @@ const Navbar = () => {
   const [LoggedIn, setLoggedIn] = useState(false);
   const history = useHistory();
   const location = useLocation();
-  let username = localStorage.username;
+  let username = window.localStorage.getItem("username");
   const [isOrg, setIsOrg] = useState(false);
 
   useEffect(() => {
@@ -17,6 +17,10 @@ const Navbar = () => {
   const logout = () => {
     window.localStorage.clear();
     history.push("/");
+  };
+
+  const reloadprofile = () => {
+    window.location.reload();
   };
 
   return (
@@ -43,16 +47,22 @@ const Navbar = () => {
             </>
           ) : (
             <>
-              <Link to="/create-event">Create Event</Link>{" "}
+              <Link className="navbar-menu-item" to="/create-event">
+                Create Event
+              </Link>
               {/* for testing purposes */}
               {/* {isOrg ? (
                 <>
-                  <Link to="/create-event">Create Event</Link>
+                  <Link className="navbar-menu-item" to="/create-event">Create Event</Link>
                 </>
               ) : (
                 <p></p>
               )} */}
-              <Link className="navbar-menu-item" to={`/profile/${username}`}>
+              <Link
+                className="navbar-menu-item"
+                to={`/profile/${username}`}
+                onClick={reloadprofile}
+              >
                 {username}Profile
               </Link>
               <Link className="navbar-menu-item" to="/" onClick={logout}>
