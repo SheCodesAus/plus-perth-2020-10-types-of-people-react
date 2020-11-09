@@ -19,9 +19,9 @@ const Navbar = () => {
     history.push("/");
   };
 
-  const reloadprofile = () => {
-    window.location.reload();
-  };
+  // const reloadprofile = () => {
+  //   window.location.reload();
+  // };
 
   return (
     <>
@@ -61,7 +61,7 @@ const Navbar = () => {
               <Link
                 className="navbar-menu-item"
                 to={`/profile/${username}`}
-                onClick={reloadprofile}
+                // onClick={reloadprofile}
               >
                 {username}Profile
               </Link>
