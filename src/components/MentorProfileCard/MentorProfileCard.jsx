@@ -8,6 +8,24 @@ const MentorProfileCard = (props) => {
   const [mentorDataProfile, setMentorDataProfile] = useState({});
   let user = window.localStorage.getItem("username");
   const [isBusy, setBusy] = useState(true);
+  const [eventsAttended, setEventsAttended] = useState({});
+
+  const fetchMentorEvents = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}events/${props.props.username}/mentor-attendance/`
+    );
+    if (response.ok) {
+      // console.log(response);
+      const data = await response.json();
+      if (data) {
+        setEventsAttended(data);
+        console.log(data);
+        setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
 
   const fetchMentor = async () => {
     const response = await fetch(
@@ -27,6 +45,7 @@ const MentorProfileCard = (props) => {
   };
   useEffect(() => {
     fetchMentor();
+    fetchMentorEvents();
   }, []);
 
   const mentor_profile = {
@@ -147,6 +166,9 @@ const MentorProfileCard = (props) => {
                       <h2>{mentor_profile.username}</h2>
                       <p>Email: {mentor_profile.email}</p>
                       {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
+                      {retrieveIcons(mentor_profile.skills).map((icon) => (
+                        <>{icon}</>
+                      ))}
                     </div>
                   </div>
                   <div id="m-profile-section-2">
@@ -154,14 +176,16 @@ const MentorProfileCard = (props) => {
                     <p>{mentor_profile.bio}</p>
                   </div>
                 </div>
-                {/* <div id="m-profile-section-3">
-//   <h3>Events I've mentored at</h3>
-//   <div className="event-grid">
-//     {events.map((event) => {
-//       return <EventCard event={event} />;
-//     })}
-//   </div>
-// </div> */}
+                <div id="m-profile-section-3">
+                  {/* <h3>Events I've signed up for</h3> */}
+
+                  <h3>Events I've mentored at</h3>
+                  {/* <div className="event-grid">
+                    {eventsAttended.map((event) => {
+                      return <EventCard event={event} />;
+                    })}
+                  </div> */}
+                </div>
               </>
             )}
           </div>
