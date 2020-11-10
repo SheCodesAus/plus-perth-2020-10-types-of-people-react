@@ -8,7 +8,26 @@ const MentorProfileCard = (props) => {
   const [mentorDataProfile, setMentorDataProfile] = useState({});
   let user = window.localStorage.getItem("username");
   const [isBusy, setBusy] = useState(true);
-  const [eventList, setEventList] = useState([]);
+
+  const [eventsAttended, setEventsAttended] = useState({});
+
+  const fetchMentorEvents = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}events/${props.props.username}/mentor-attendance/`
+    );
+    if (response.ok) {
+      // console.log(response);
+      const data = await response.json();
+      if (data) {
+        setEventsAttended(data);
+        console.log(data);
+        setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
+
 
   const fetchMentor = async () => {
     const response = await fetch(
@@ -28,6 +47,7 @@ const MentorProfileCard = (props) => {
   };
   useEffect(() => {
     fetchMentor();
+    fetchMentorEvents();
   }, []);
 
   // useEffect(() => {
@@ -160,15 +180,11 @@ const MentorProfileCard = (props) => {
                       <IsOwnerCanEdit />
                       <h2>{mentor_profile.username}</h2>
                       <p>Email: {mentor_profile.email}</p>
-                      <br></br>
-                      <div id="m-profile-skills-container">
-                        <h3>Skills:</h3>
-                        {/* <p>Skills: {mentor_profile.skills}</p> */}
-                        {/* {skillIcons} */}
-                        {retrieveIcons(mentor_profile.skills).map((icon) => (
-                          <>{icon}</>
-                        ))}
-                      </div>
+                      {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
+                      {retrieveIcons(mentor_profile.skills).map((icon) => (
+                        <>{icon}</>
+                      ))}
+
                     </div>
                   </div>
                   <div id="m-profile-section-2">
@@ -178,13 +194,16 @@ const MentorProfileCard = (props) => {
                   </div>
                 </div>
                 <div id="m-profile-section-3">
-                  <h3>Events I've mentored at:</h3>
-                  {/* <div className="event-grid"> */}
-                  {/* {events.map((event) => { */}
-                  {/* return <EventCard event={event} />; */}
-                  {/* })} */}
+                  {/* <h3>Events I've signed up for</h3> */}
+
+                  <h3>Events I've mentored at</h3>
+                  {/* <div className="event-grid">
+                    {eventsAttended.map((event) => {
+                      return <EventCard event={event} />;
+                    })}
+                  </div> */}
                 </div>
-                {/* </div> */}
+
               </>
             )}
           </div>

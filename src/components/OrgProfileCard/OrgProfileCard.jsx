@@ -7,6 +7,7 @@ const OrgProfileCard = (props) => {
   const [OrgDataProfile, setOrgDataProfile] = useState({});
   let user = window.localStorage.getItem("username");
   const [isBusy, setBusy] = useState(true);
+  const [eventsHosted, setEventsHosted] = useState();
 
   const fetchOrg = async () => {
     const response = await fetch(
@@ -18,6 +19,23 @@ const OrgProfileCard = (props) => {
       if (data) {
         setOrgDataProfile(data);
         // console.log(data);
+        // setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
+
+  const fetchOrgEvents = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}events/${props.props.username}/events-hosted/`
+    );
+    if (response.ok) {
+      // console.log(response);
+      const data = await response.json();
+      if (data) {
+        setEventsHosted(data);
+        // console.log(data);
         setBusy(false);
       }
       return;
@@ -27,6 +45,7 @@ const OrgProfileCard = (props) => {
 
   useEffect(() => {
     fetchOrg();
+    fetchOrgEvents();
   }, []);
 
   const org_profile = {
@@ -82,7 +101,8 @@ const OrgProfileCard = (props) => {
   //     },
   //   ];
 
-  //   const [events, setEvents] = useState(eventsHosted);
+  // const [events, setEvents] = useState(eventsHosted);
+
   function IsOwnerCanEdit() {
     // if (username != null) {
     if (user === org_profile.username) {
@@ -101,6 +121,30 @@ const OrgProfileCard = (props) => {
     }
   }
   // }
+
+  function Eventstest() {
+    // {
+    //   eventsHosted.map((events) => {
+    //     // console.log(events);
+    //     return <EventCard events={events} />;
+    //   });
+    // }
+    <ul>
+      {/* {eventsHosted.map((hostedData, key) => {
+        // console.log(hostedData.organiser);
+        return (
+          <li key={hostedData.id}>
+            <>
+              Event {hostedData.id} at {hostedData.event_name}
+              <Link to={`/events/${hostedData.id}`}></Link>
+            </>
+          </li>
+        );
+      })} */}
+    </ul>;
+  }
+
+  // console.log(eventsHosted);
   return (
     <>
       {isBusy ? (
@@ -154,19 +198,34 @@ const OrgProfileCard = (props) => {
                     <p>{org_profile.org_bio}</p>
                   </div>
                 </div>
-                {/* <div id="m-profile-section-3">
-//   <h3>Events I've mentored at</h3>
-//   <div className="event-grid">
-//     {events.map((event) => {
-//       return <EventCard event={event} />;
-//     })}
-//   </div>
-// </div> */}
               </>
             )}
           </div>
         </>
       )}
+      <div id="m-profile-section-3">
+        <h3>Events hosted</h3>
+        {/* doesn't render fast enough */}
+        {/* {eventsHosted.map((hostedData, key) => {
+          // console.log(hostedData.organiser);
+          return (
+            <li key={hostedData.id}>
+              <>
+                <Link to={`/events/${hostedData.id}`}>
+                  Event {hostedData.id}: {hostedData.event_name} at{" "}
+                  {hostedData.event_date}
+                </Link>
+              </>
+            </li>
+          );
+        })} */}
+        <div className="event-grid">
+          {/* {eventsHosted.map((events) => {
+            console.log(events);
+            return <EventCard events={events} />;
+          })} */}
+        </div>
+      </div>
     </>
   );
 };
