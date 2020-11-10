@@ -19,9 +19,10 @@ const Navbar = () => {
         history.push("/");
     };
 
-    const reloadprofile = () => {
-        window.location.reload();
-    };
+  // const reloadprofile = () => {
+  //   window.location.reload();
+  // };
+
 
     return (
         <>
@@ -61,27 +62,25 @@ const Navbar = () => {
               ) : (
                 <p></p>
               )} */}
-                            <Link
-                                className="navbar-menu-item"
-                                to={`/profile/${username}`}
-                                onClick={reloadprofile}
-                            >
-                                {username}
-                            </Link>
-                            <Link
-                                className="navbar-menu-item"
-                                to="/"
-                                onClick={logout}
-                            >
-                                Logout
-                            </Link>
-                        </>
-                    )}
-                </div>
-            </div>
-            <div className="separation-container"></div>
-        </>
-    );
+
+             <Link
+                className="navbar-menu-item"
+                to={`/profile/${username}`}
+                // onClick={reloadprofile}
+              >
+                {username}Profile
+              </Link>
+              <Link className="navbar-menu-item" to="/" onClick={logout}>
+                Logout
+              </Link>
+            </>
+          )}
+        </div>
+      </div>
+      <div className="separation-container"></div>
+    </>
+  );
+
 };
 
 export default Navbar;
