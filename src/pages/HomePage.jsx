@@ -3,20 +3,6 @@ import { Link } from "react-router-dom";
 import EventCard from "../components/EventCard/EventCard";
 
 const HomePage = () => {
-  // const events = [
-  //   {
-  //   id: 1,
-  //   event_name: "SheCodes Python Workshop",
-  //   event_description:
-  //     "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-  //   event_image:
-  //     "https://cdn.pixabay.com/photo/2015/01/08/18/24/programming-593312_960_720.jpg",
-  //   event_location: "Riff",
-  //   organiser: "She Codes",
-  //   category: "Python",
-  //   event_date: "Dec 12, 2019",
-  // },
-  // ];
   // FETCH MOST RECENT LIST AND CATEGORY LISTS HERE AND SET STATE BELOW
   // const [mostRecent, setMostRecent] = useState(events);
   // const [pythonEvents, setPythonEvents] = useState(events);
@@ -26,6 +12,7 @@ const HomePage = () => {
   // const [reactEvents, setReactEvents] = useState(events);
 
   const [eventList, setEventList] = useState([]);
+  const [filter, setFilter] = useState();
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}events/`)
@@ -77,11 +64,18 @@ const HomePage = () => {
       </section>
       <section className="event-list-container">
         <h2>Python events</h2>
-        {/* <div className="event-grid">
-          {events.map((event) => {
+        <div className="event-grid">
+          {/* {events.map((event) => {
+            id = "Python";
+            setFilter(event.target.name);
             return <EventCard event={event} />;
-          })}
-        </div> */}
+          })} */}
+          {/* {eventList.reduce((total, eventData, key) => {
+            if (filter === "Python");
+            total.push(<EventCard key={key} eventData={eventData} />);
+            return total;
+          }, [])} */}
+        </div>
         <Link to="/">See all Python events</Link>
       </section>
       <section className="event-list-container">

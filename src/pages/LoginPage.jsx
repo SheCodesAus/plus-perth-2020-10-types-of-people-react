@@ -5,8 +5,7 @@ import LoginForm from "../components/LoginForm/LoginForm";
 const LoginPage = () => {
   const [LoggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
-  let username = localStorage.username;
-  username = window.localStorage.getItem("username");
+  let username = window.localStorage.getItem("username");
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
