@@ -7,6 +7,7 @@
     width: 75vw;
     margin: 0;
     background-color: var(--white-color);
+    z-index: 10;
 }
 
 #navbar-logo-container {
@@ -32,6 +33,6 @@
         position: fixed;
         width: 92vw;
         margin: 0;
-        background-color: transparent;
+        /* background-color: transparent; */
     }
 }

@@ -1,10 +1,26 @@
-import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import React, { Fragment, useState, useEffect } from "react";
+import { Form } from "react-bootstrap";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "./MentorProfileCard.css";
 
 function EditProfileFrom(props) {
   const history = useHistory();
   const { userData, mentorDataProfile } = props;
   let username = localStorage.username;
+  const [categoryData, setCategoryData] = useState([]);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}events/categories/`)
+      .then((results) => {
+        return results.json();
+      })
+      .then((data) => {
+        setCategoryData(data);
+      });
+  }, []);
+
+  const category_option = categoryData.map((category) => category.category);
 
   const [credentials, setCredentials] = useState({
     username: "",
@@ -14,7 +30,8 @@ function EditProfileFrom(props) {
   const [public_profile, SetPublic_profile] = useState({
     name: "",
     bio: "",
-    // skills: "",
+    skills: [],
+    location: "",
   });
 
   useEffect(() => {
@@ -25,9 +42,16 @@ function EditProfileFrom(props) {
     SetPublic_profile({
       bio: mentorDataProfile === null ? " " : mentorDataProfile.bio,
       name: mentorDataProfile === undefined ? " " : mentorDataProfile.name,
-      // skills: mentorDataProfile === undefined ? " " : mentorDataProfile.skills,
+      skills: mentorDataProfile === null ? " " : mentorDataProfile.skills,
+      // skills: mentorDataProfile.skills,
+      location:
+        mentorDataProfile === undefined ? " " : mentorDataProfile.location,
     });
   }, [userData, mentorDataProfile]);
+
+  const updateCat = (newCat) => {
+    SetPublic_profile({ ...public_profile, skills: newCat });
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -84,7 +108,7 @@ function EditProfileFrom(props) {
 
   return (
     <form className="form">
-      <div className="form-item">
+      {/* <div className="form-item">
         <label htmlFor="username">Username:</label>
         <input
           type="text"
@@ -92,7 +116,7 @@ function EditProfileFrom(props) {
           value={credentials.username}
           onChange={handleChange}
         />
-      </div>
+      </div> */}
       <div className="form-item">
         <label htmlFor="email">Email:</label>
         <input
@@ -120,6 +144,15 @@ function EditProfileFrom(props) {
           onChange={handleChange}
         />
       </div>
+      <div className="form-item">
+        <label htmlFor="location">Location:</label>
+        <input
+          type="text"
+          id="location"
+          defaultValue={public_profile.location}
+          onChange={handleChange}
+        />
+      </div>
       {/* <div className="form-item">
         <label htmlFor="skills">Skills:</label>
         <input
@@ -129,6 +162,25 @@ function EditProfileFrom(props) {
           onChange={handleChange}
         />
       </div> */}
+      <div className="form-item">
+        <Fragment>
+          <div className="category-item-container">
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Skills</Form.Label>
+              <Typeahead
+                id="skills"
+                labelKey="skills"
+                // defaultValue={public_profile.skills}
+                multiple
+                onChange={updateCat}
+                options={category_option}
+                // placeholder="Choose categories..."
+                selected={public_profile.skills}
+              />
+            </Form.Group>
+          </div>
+        </Fragment>
+      </div>
 
       <button className="btn" type="submit" onClick={handleSubmit}>
         Update Account

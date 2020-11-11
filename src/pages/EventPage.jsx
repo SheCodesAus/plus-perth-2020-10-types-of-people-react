@@ -1,24 +1,47 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
+import AddToCalendar from "react-add-to-calendar";
+import MentorRegisterForm from "../components/MentorRegisterForm/MentorRegisterForm";
 
 const EventPage = () => {
   const { id } = useParams();
-  const [eventData, setEventData] = useState();
-  //   const [eventData, setEventData] = useState({ responses: [] });
+  const [eventData, setEventData] = useState({ responses: [] });
   const [isBusy, setBusy] = useState(true);
-  let username = localStorage.username;
+  const [LoggedIn, setLoggedIn] = useState(false);
+  const location = useLocation();
+  const [userData, setUserData] = useState({});
+  let username = window.localStorage.getItem("username");
+
+  const fetchUser = async () => {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}users/${username}/`
+    );
+    if (response.ok) {
+      const data = await response.json();
+      if (data) {
+        setUserData(data);
+        // setBusy(false);
+      }
+      return;
+    }
+    const data = await response.json();
+  };
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+    token != null ? setLoggedIn(true) : setLoggedIn(false);
+  }, [location]);
 
   const fetchEvent = async () => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}events/${id}/`
     );
     if (response.ok) {
-      console.log(response);
+      // console.log(response);
       const data = await response.json();
-
       if (data) {
         setEventData(data);
-        console.log(data);
+        // console.log(data);
         setBusy(false);
       }
       return;
@@ -27,13 +50,24 @@ const EventPage = () => {
   };
 
   useEffect(() => {
+    fetchUser();
     fetchEvent();
   }, []);
-  // console.log(id);
+
+  const generateCalendar = (eventData) => {
+    const event = {
+      title: eventData.event_name,
+      description: eventData.event_description,
+      location: eventData.description,
+      startTime: eventData.event_start,
+      endTime: eventData.event_end,
+    };
+
+    return <AddToCalendar event={event} />;
+  };
 
   function IsOwnerCanEdit() {
-    username = window.localStorage.getItem("username");
-    // if (username != null && projectData.owner != null) {
+    // if (username != null && eventData.organiser != null) {
     if (username === eventData.organiser) {
       return (
         <div id="owner-links">
@@ -51,71 +85,68 @@ const EventPage = () => {
       // return <p>username != owner</p>;
     }
     // }
+  }
+
+  function ShowRegistrations() {
+    if (username === eventData.organiser) {
+      return (
+        <div id="owner-links">
+          {eventData.responses && (
+            <div>
+              <h3>Recent Registrations: </h3>
+              <ul>
+                {eventData.responses.map((pledgeData, key) => {
+                  return (
+                    <li key={pledgeData.id}>
+                      {pledgeData.mentor} registered on{" "}
+                      {Date(pledgeData.date_registered)}
+                    </li>
+                  );
+                })}
+              </ul>
+              {/* Do we want all to see number of registrations or only the organiser? */}
+              {/* <h3>Current registrations:</h3> */}
+              {/* count the number of registrations  in the backend?*/}
+            </div>
+          )}
+        </div>
+      );
+    } else {
+      return <p></p>;
+    }
+  }
+
+  const event_is_open = () => {
+    const today = new Date();
+    const event_date = new Date(eventData.event_date);
+
+    if (event_date - today >= 0) {
+      //first date is in future, or it is today
+      // return false;
+      return (eventData.is_open = true);
+    }
+    // return true;
+    return (eventData.is_open = false);
   };
 
-  var gapi = window.gapi
-    var CLIENT_ID = "386459840730-gseilbtrjdhfd9fk1qmsg9nlkqefpova.apps.googleusercontent.com"
-    var API_KEY = "AIzaSyBZb0EU63zw3l-gx-vb7ZjfKfp5zM6WRZY"
-    var DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"]
-    var SCOPES = "https://www.googleapis.com/auth/calendar.events"
-    
-    const AddToCalendar = () => {
-        gapi.load('client:auth2', () => {
-          console.log('loaded client')
-    
-          gapi.client.init({
-            apiKey: API_KEY,
-            clientId: CLIENT_ID,
-            discoveryDocs: DISCOVERY_DOCS,
-            scope: SCOPES,
-          })
-    
-          gapi.client.load('calendar', 'v3')
-    
-          gapi.auth2.getAuthInstance().signIn()
-          .then(() => {
-            
-            var event = {
-              'summary': eventData.event_name,
-              'location': eventData.event_location,
-              'description': eventData.event_description,
-            
-              'start': {
-                'dateTime': eventData.event_start,
-                'timeZone': 'Australia/Perth'
-              },
-              'end': {
-                'dateTime': eventData.event_end,
-                'timeZone': 'Australia/Perth',
-              },
-            }
-            
-            var request = gapi.client.calendar.events.insert({
-              'calendarId': 'primary',
-              'resource': event,
-            })
-    
-    
-            request.execute(event => {
-              window.open(event.htmlLink)
-            })
-            
-    
-            gapi.client.calendar.events.list({
-              'calendarId': 'primary',
-              'timeMin': (new Date()).toISOString(),
-              'showDeleted': false,
-              'singleEvents': true,
-              'maxResults': 5,
-              'orderBy': 'startTime'
-            }).then(response => {
-              const events = response.result.items
-            })    
-          })
-        })
+  function Status() {
+    if (eventData.is_open) {
+      return <p>Open</p>;
+    } else {
+      return <p>Closed</p>;
+    }
+    // elif {
+    //   console.error("No is_open defined");
+    // }
+  }
 
-    };
-
+  function MentorRegister() {
+    if (userData.is_org) {
+      // return <p>Only mentors can register to mentor at events </p>;
+    } else {
+      return <MentorRegisterForm id={id} />;
+    }
+  }
 
   return (
     <>
@@ -124,15 +155,44 @@ const EventPage = () => {
       ) : (
         <div id="event-page" className="container">
           <IsOwnerCanEdit />
-          <h3>{eventData.event_date}</h3>
           <h1>{eventData.event_name}</h1>
+          <h3>{eventData.event_date}</h3>
           <h3>Hosted by {eventData.organiser}</h3>
           <div id="event-page-image">
             <img src={eventData.event_image} alt="event image" />
           </div>
+          <div id="status">
+            <h3>Status: </h3>
+            <h3>
+              {event_is_open()}
+              <Status />
+            </h3>
+          </div>
           <p>{eventData.event_description}</p>
-
-          <button onClick={AddToCalendar}>Add Event to Google Calendar</button>
+          <br></br>
+          {generateCalendar(eventData)}
+          {/* if logged in and not an org */}
+          {!LoggedIn ? (
+            <>
+              <p>
+                Login to register your interest to be a mentor at this event
+              </p>
+            </>
+          ) : (
+            <>
+              {!event_is_open() ? (
+                <>
+                  <h4>Responses are closed for this event</h4>
+                </>
+              ) : (
+                <>
+                  {/* <MentorRegisterForm id={id} /> */}
+                  {MentorRegister()}
+                </>
+              )}
+            </>
+          )}
+          <ShowRegistrations />
         </div>
       )}
     </>
