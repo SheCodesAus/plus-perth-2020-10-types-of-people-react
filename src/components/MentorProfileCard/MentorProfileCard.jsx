@@ -66,13 +66,11 @@ const MentorProfileCard = (props) => {
     email: props.props.email,
     name: mentorDataProfile.name,
     bio: mentorDataProfile.bio,
-    image:
-      "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
-    // mentorDataProfile.image,
+    image: mentorDataProfile.mentor_image,
     skills: mentorDataProfile.skills,
     location: mentorDataProfile.location,
   };
-
+  console.log(mentorDataProfile.mentor_image)
   //   const eventsMentoredAt = [
   //     {
   //       id: 1,
@@ -171,7 +169,7 @@ const MentorProfileCard = (props) => {
                     <div id="m-profile-left">
                       <img
                         id="m-profile-image"
-                        src={mentor_profile.image}
+                        src={mentor_profile.mentor_image}
                         alt={mentor_profile.username}
                       />
                     </div>
