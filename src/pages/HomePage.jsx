@@ -13,6 +13,7 @@ const HomePage = () => {
 
   const [eventList, setEventList] = useState([]);
   const [filter, setFilter] = useState();
+  const [mostPopularList, SetMostPopularList] = useState([]);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}events/`)
@@ -21,6 +22,16 @@ const HomePage = () => {
       })
       .then((data) => {
         setEventList(data);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}events/most-popular/short-list/`)
+      .then((results) => {
+        return results.json();
+      })
+      .then((data) => {
+        SetMostPopularList(data);
       });
   }, []);
 
@@ -63,38 +74,56 @@ const HomePage = () => {
         <Link to="/">See all events</Link>
       </section>
       <section className="event-list-container">
-        <h2>Python events</h2>
-        <div className="event-grid">
-          {/* {events.map((event) => {
-            id = "Python";
-            setFilter(event.target.name);
-            return <EventCard event={event} />;
-          })} */}
-          {/* {eventList.reduce((total, eventData, key) => {
-            if (filter === "Python");
-            total.push(<EventCard key={key} eventData={eventData} />);
-            return total;
-          }, [])} */}
-        </div>
-        <Link to="/">See all Python events</Link>
-      </section>
-      <section className="event-list-container">
         <h2>JavaScript events</h2>
         <div className="event-grid">
-          {/* {events.map((event) => {
-              return <EventCard event={event} />;
-            })} */}
+          {eventList.map((eventData, key) => {
+            return eventData.categories.includes("JavaScript") ? (
+              <EventCard key={key} eventData={eventData} />
+            ) : (
+              <>{/* {eventData.id} */}</>
+            );
+          })}
         </div>
-        <Link to="/">See all JavaScript events</Link>
+        <Link to="/events/Javascript/">See all JavaScript events</Link>
       </section>
       <section className="event-list-container">
         <h2>HTML events</h2>
         <div className="event-grid">
-          {/* {events.map((event) => {
-              return <EventCard event={event} />;
-            })} */}
+          {eventList.map((eventData, key) => {
+            return eventData.categories.includes("HTML") ? (
+              <EventCard key={key} eventData={eventData} />
+            ) : (
+              <>{/* {eventData.id} */}</>
+            );
+          })}
         </div>
-        <Link to="/">See all HTML events</Link>
+        <Link to="/events/HTML/">See all HTML events</Link>
+      </section>
+      <section className="event-list-container">
+        <h2>CSS events</h2>
+        <div className="event-grid">
+          {eventList.map((eventData, key) => {
+            return eventData.categories.includes("CSS") ? (
+              <EventCard key={key} eventData={eventData} />
+            ) : (
+              <>{/* {eventData.id} */}</>
+            );
+          })}
+        </div>
+        <Link to="/events/CSS/">See all CSS events</Link>
+      </section>
+      <section className="event-list-container">
+        <h2>React events</h2>
+        <div className="event-grid">
+          {eventList.map((eventData, key) => {
+            return eventData.categories.includes("React") ? (
+              <EventCard key={key} eventData={eventData} />
+            ) : (
+              <>{/* {eventData.id} */}</>
+            );
+          })}
+        </div>
+        <Link to="/events/React/">See all React events</Link>
       </section>
     </div>
   );

@@ -7,7 +7,7 @@ const OrgProfileCard = (props) => {
   const [OrgDataProfile, setOrgDataProfile] = useState({});
   let user = window.localStorage.getItem("username");
   const [isBusy, setBusy] = useState(true);
-  const [eventsHosted, setEventsHosted] = useState();
+  const [eventsHosted, setEventsHosted] = useState([]);
 
   const fetchOrg = async () => {
     const response = await fetch(
@@ -60,47 +60,6 @@ const OrgProfileCard = (props) => {
     // OrgDataProfile.image,
   };
 
-  // console.log(userData.is_org);
-
-  //   const eventsHosted = [
-  //     {
-  //       id: 1,
-  //       event_name: "SheCodes Python Workshop",
-  //       event_description:
-  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-  //       event_image:
-  //         "https://cdn.pixabay.com/photo/2015/01/08/18/24/programming-593312_960_720.jpg",
-  //       event_location: "Riff",
-  //       organiser: "She Codes",
-  //       category: "Python",
-  //       event_date: "Dec 12, 2019",
-  //     },
-  //     {
-  //       id: 2,
-  //       event_name: "SheCodes Junior JavaScript Workshop",
-  //       event_description:
-  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-  //       event_image:
-  //         "https://cdn.pixabay.com/photo/2015/01/08/18/24/children-593313_960_720.jpg",
-  //       event_location: "Flux",
-  //       organiser: "She Codes",
-  //       category: "JavaScript",
-  //       event_date: "Mar 20, 2019",
-  //     },
-  //     {
-  //       id: 3,
-  //       event_name: "SheCodes One-Day Workshop",
-  //       event_description:
-  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-  //       event_image:
-  //         "https://cdn.pixabay.com/photo/2017/01/12/10/40/school-1974369_960_720.jpg",
-  //       event_location: "Riff",
-  //       organiser: "She Codes",
-  //       category: "Python",
-  //       event_date: "Jan 9, 2019",
-  //     },
-  //   ];
-
   // const [events, setEvents] = useState(eventsHosted);
 
   function IsOwnerCanEdit() {
@@ -122,29 +81,6 @@ const OrgProfileCard = (props) => {
   }
   // }
 
-  function Eventstest() {
-    // {
-    //   eventsHosted.map((events) => {
-    //     // console.log(events);
-    //     return <EventCard events={events} />;
-    //   });
-    // }
-    <ul>
-      {/* {eventsHosted.map((hostedData, key) => {
-        // console.log(hostedData.organiser);
-        return (
-          <li key={hostedData.id}>
-            <>
-              Event {hostedData.id} at {hostedData.event_name}
-              <Link to={`/events/${hostedData.id}`}></Link>
-            </>
-          </li>
-        );
-      })} */}
-    </ul>;
-  }
-
-  // console.log(eventsHosted);
   return (
     <>
       {isBusy ? (
@@ -205,25 +141,10 @@ const OrgProfileCard = (props) => {
       )}
       <div id="m-profile-section-3">
         <h3>Events hosted</h3>
-        {/* doesn't render fast enough */}
-        {/* {eventsHosted.map((hostedData, key) => {
-          // console.log(hostedData.organiser);
-          return (
-            <li key={hostedData.id}>
-              <>
-                <Link to={`/events/${hostedData.id}`}>
-                  Event {hostedData.id}: {hostedData.event_name} at{" "}
-                  {hostedData.event_date}
-                </Link>
-              </>
-            </li>
-          );
-        })} */}
         <div className="event-grid">
-          {/* {eventsHosted.map((events) => {
-            console.log(events);
-            return <EventCard events={events} />;
-          })} */}
+          {eventsHosted.map((eventData, key) => {
+            return <EventCard key={key} eventData={eventData} />;
+          })}
         </div>
       </div>
     </>
