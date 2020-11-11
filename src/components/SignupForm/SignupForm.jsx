@@ -14,7 +14,6 @@ const SignupForm = () => {
   const history = useHistory();
 
   const isChecked = (event) => {
-    console.log(event.target.checked)
     event.target.checked? 
     setCredentials((prevCredentials) => ({
       ...prevCredentials,
@@ -24,7 +23,6 @@ const SignupForm = () => {
       ...prevCredentials,
       is_org: false,
     }))
-    console.log('woo')
   }
 
   const handleChange = (e) => {
@@ -36,7 +34,6 @@ const SignupForm = () => {
   };
 
   const postData = async () => {
-    console.log(process.env.REACT_APP_API_URL)
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}users/register/`,
       {
@@ -46,22 +43,21 @@ const SignupForm = () => {
         },
         body: JSON.stringify(credentials),
       },
-      console.log(credentials)
     );
-    return response.json();
+    return response;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // if (credentials.title != null) {
-    if (credentials.username && credentials.password) {
       postData().then((response) => {
-        console.log(response);
-        window.localStorage.setItem("username", credentials.username);
-        console.log("username:", credentials.username);
-        history.push("/profile/:username");
+        console.log(response)
+        if (response.status === 201) {
+          window.localStorage.setItem("username", credentials.username);
+          history.push("/login");
+        } else {
+          alert("this username has already exists")
+        }
       });
-    }
     // }
   };
 
