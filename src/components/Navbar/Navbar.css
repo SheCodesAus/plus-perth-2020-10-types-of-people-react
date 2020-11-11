@@ -33,6 +33,6 @@
         position: fixed;
         width: 92vw;
         margin: 0;
-        background-color: transparent;
+        /* background-color: transparent; */
     }
 }
