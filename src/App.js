@@ -14,6 +14,7 @@ import EditProfileForm from "./pages/EditProfilePage";
 import DeleteUserPage from "./pages/DeleteUserPage";
 import EditEventPage from "./pages/EditEventPage";
 import DeleteEventPage from "./pages/DeleteEventPage";
+import FilterEventsPage from "./pages/FilterEventPage";
 
 
 function App() {
@@ -22,6 +23,12 @@ function App() {
         <div>
             <Navbar />
             <Switch>
+            {/* <Route path="/events/filter/:filter">
+                    <FilterEventsPage />
+                </Route> */}
+                <Route path="/events/filter">
+                    <FilterEventsPage />
+                </Route>
                 <Route path="/events/:id/edit">
                     <EditEventPage />
                 </Route>

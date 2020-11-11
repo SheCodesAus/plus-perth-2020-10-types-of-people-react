@@ -70,8 +70,20 @@ const HomePage = () => {
             return <EventCard key={key} eventData={eventData} />;
           })}
         </div>
-
         <Link to="/">See all events</Link>
+      </section>
+      <section className="event-list-container">
+        <h2>Python events</h2>
+        <div className="event-grid">
+          {eventList.map((eventData, key) => {
+            return eventData.categories.includes("Python") ? (
+              <EventCard key={key} eventData={eventData} />
+            ) : (
+              <></>
+            );
+          })}
+        </div>
+        <Link to="/events/filter">See all Python events</Link>
       </section>
       <section className="event-list-container">
         <h2>JavaScript events</h2>
@@ -80,11 +92,11 @@ const HomePage = () => {
             return eventData.categories.includes("JavaScript") ? (
               <EventCard key={key} eventData={eventData} />
             ) : (
-              <>{/* {eventData.id} */}</>
+              <></>
             );
           })}
         </div>
-        <Link to="/events/Javascript/">See all JavaScript events</Link>
+        <Link to="/events/filter/">See all JavaScript events</Link>
       </section>
       <section className="event-list-container">
         <h2>HTML events</h2>
@@ -93,24 +105,26 @@ const HomePage = () => {
             return eventData.categories.includes("HTML") ? (
               <EventCard key={key} eventData={eventData} />
             ) : (
-              <>{/* {eventData.id} */}</>
+              <></>
             );
           })}
         </div>
-        <Link to="/events/HTML/">See all HTML events</Link>
+        <Link to="/events/filter/">See all HTML events</Link>
       </section>
       <section className="event-list-container">
         <h2>CSS events</h2>
-        <div className="event-grid">
+        <div>
           {eventList.map((eventData, key) => {
             return eventData.categories.includes("CSS") ? (
-              <EventCard key={key} eventData={eventData} />
+              <div className="event-grid">
+                <EventCard key={key} eventData={eventData} />
+              </div>
             ) : (
-              <>{/* {eventData.id} */}</>
+              <> </>
             );
           })}
         </div>
-        <Link to="/events/CSS/">See all CSS events</Link>
+        <Link to="/events/filter/">See all CSS events</Link>
       </section>
       <section className="event-list-container">
         <h2>React events</h2>
@@ -119,11 +133,11 @@ const HomePage = () => {
             return eventData.categories.includes("React") ? (
               <EventCard key={key} eventData={eventData} />
             ) : (
-              <>{/* {eventData.id} */}</>
+              <></>
             );
           })}
         </div>
-        <Link to="/events/React/">See all React events</Link>
+        <Link to="/events/filter/">See all React events</Link>
       </section>
     </div>
   );
