@@ -9,7 +9,7 @@ const MentorProfileCard = (props) => {
   let user = window.localStorage.getItem("username");
   const [isBusy, setBusy] = useState(true);
 
-  const [eventsAttended, setEventsAttended] = useState({});
+  const [eventsAttended, setEventsAttended] = useState([]);
 
   const fetchMentorEvents = async () => {
     const response = await fetch(
@@ -27,7 +27,6 @@ const MentorProfileCard = (props) => {
     }
     const data = await response.json();
   };
-
 
   const fetchMentor = async () => {
     const response = await fetch(
@@ -50,16 +49,6 @@ const MentorProfileCard = (props) => {
     fetchMentorEvents();
   }, []);
 
-  // useEffect(() => {
-  //   fetch(`${process.env.REACT_APP_API_URL}events`)
-  //     .then((results) => {
-  //       return results.json();
-  //     })
-  //     .then((data) => {
-  //       setEventList(data);
-  //     });
-  // }, []);
-
   const mentor_profile = {
     is_org: props.props.is_org,
     username: props.props.username,
@@ -72,51 +61,6 @@ const MentorProfileCard = (props) => {
     skills: mentorDataProfile.skills,
     location: mentorDataProfile.location,
   };
-
-  //   const eventsMentoredAt = [
-  //     {
-  //       id: 1,
-  //       event_name: "SheCodes Python Workshop",
-  //       event_description:
-  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-  //       event_image:
-  //         "https://cdn.pixabay.com/photo/2015/01/08/18/24/programming-593312_960_720.jpg",
-  //       event_location: "Riff",
-  //       organiser: "She Codes",
-  //       category: "Python",
-  //       event_date: "Dec 12, 2019",
-  //     },
-  //     {
-  //       id: 2,
-  //       event_name: "SheCodes Junior JavaScript Workshop",
-  //       event_description:
-  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-  //       event_image:
-  //         "https://cdn.pixabay.com/photo/2015/01/08/18/24/children-593313_960_720.jpg",
-  //       event_location: "Flux",
-  //       organiser: "She Codes",
-  //       category: "JavaScript",
-  //       event_date: "Mar 20, 2019",
-  //     },
-  //     {
-  //       id: 3,
-  //       event_name: "SheCodes One-Day Workshop",
-  //       event_description:
-  //         "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sed deserunt nulla, excepturi cumque velit iure distinctio itaque, non ad pariatur quod enim praesentium provident incidunt voluptas odio laboriosam asperiores corrupti a odit, eaque dolores laborum sequi ipsa. Iusto distinctio velit sint consectetur maxime repudiandae nemo nostrum! Beatae facere delectus tempora.",
-  //       event_image:
-  //         "https://cdn.pixabay.com/photo/2017/01/12/10/40/school-1974369_960_720.jpg",
-  //       event_location: "Riff",
-  //       organiser: "She Codes",
-  //       category: "Python",
-  //       event_date: "Jan 9, 2019",
-  //     },
-  //   ];
-
-  // fetch events mentored at and replace state value here:
-  //   const [events, setEvents] = useState(eventsMentoredAt);
-  // const skillIcons = retrieveIcons(mentor_profile.skills).map((icon) => (
-  //   <>{icon}</>
-  // ));
 
   function IsOwnerCanEdit() {
     // if (username != null) {
@@ -184,7 +128,6 @@ const MentorProfileCard = (props) => {
                       {retrieveIcons(mentor_profile.skills).map((icon) => (
                         <>{icon}</>
                       ))}
-
                     </div>
                   </div>
                   <div id="m-profile-section-2">
@@ -197,13 +140,12 @@ const MentorProfileCard = (props) => {
                   {/* <h3>Events I've signed up for</h3> */}
 
                   <h3>Events I've mentored at</h3>
-                  {/* <div className="event-grid">
-                    {eventsAttended.map((event) => {
-                      return <EventCard event={event} />;
+                  <div className="event-grid">
+                    {eventsAttended.map((eventData, key) => {
+                      return <EventCard key={key} eventData={eventData} />;
                     })}
-                  </div> */}
+                  </div>
                 </div>
-
               </>
             )}
           </div>
