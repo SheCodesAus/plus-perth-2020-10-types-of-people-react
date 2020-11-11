@@ -118,8 +118,8 @@ const EventPage = () => {
 
   const event_is_open = () => {
     const today = new Date();
-    const event_date = new Date(eventData.event_date);
-
+    const event_date = new Date(eventData.event_datetime_start);
+    console.log(eventData.event_datetime_start);
     if (event_date - today >= 0) {
       //first date is in future, or it is today
       // return false;
@@ -156,7 +156,7 @@ const EventPage = () => {
         <div id="event-page" className="container">
           <IsOwnerCanEdit />
           <h1>{eventData.event_name}</h1>
-          <h3>{eventData.event_date}</h3>
+          <h3>{Date(eventData.event_datetime_start)}</h3>
           <h3>Hosted by {eventData.organiser}</h3>
           <div id="event-page-image">
             <img src={eventData.event_image} alt="event image" />
