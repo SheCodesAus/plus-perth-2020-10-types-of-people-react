@@ -5,9 +5,9 @@ import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
 
 const MentorProfileCard = (props) => {
-  const [mentorDataProfile, setMentorDataProfile] = useState({});
-  let user = window.localStorage.getItem("username");
-  const [isBusy, setBusy] = useState(true);
+    const [mentorDataProfile, setMentorDataProfile] = useState({});
+    let user = window.localStorage.getItem("username");
+    const [isBusy, setBusy] = useState(true);
 
   const [eventsAttended, setEventsAttended] = useState([]);
 
@@ -78,36 +78,11 @@ const MentorProfileCard = (props) => {
     } else {
       return <p></p>;
     }
-    // }
-  }
-  return (
-    <>
-      {isBusy ? (
-        <p>loading</p>
-      ) : (
+    
+    return (
         <>
-          <div id="profile-exist">
-            {(mentorDataProfile.name === null ||
-              mentorDataProfile.name === undefined) &&
-            mentorDataProfile.skills.length == 0 &&
-            // (mentor_profile.image === null ||
-            //   mentor_profile.image === undefined) &&
-            (mentor_profile.bio === null ||
-              mentor_profile.bio === undefined) ? (
-              <div>
-                <h2>{mentor_profile.username}</h2>
-                <h2>There is no user profile set up for this user </h2>
-                {user === mentor_profile.username ? (
-                  <>
-                    <p>Tell us about yourself and your skills</p>
-                    <IsOwnerCanEdit />
-                    <br></br>
-                    <p>Email: {mentor_profile.email}</p>
-                  </>
-                ) : (
-                  <p></p>
-                )}
-              </div>
+            {isBusy ? (
+                <p>loading</p>
             ) : (
               <>
                 <div id="m-profile-sections-1-2">
@@ -138,7 +113,6 @@ const MentorProfileCard = (props) => {
                 </div>
                 <div id="m-profile-section-3">
                   {/* <h3>Events I've signed up for</h3> */}
-
                   <h3>Events I've mentored at</h3>
                   <div className="event-grid">
                     {eventsAttended.map((eventData, key) => {
@@ -146,13 +120,9 @@ const MentorProfileCard = (props) => {
                     })}
                   </div>
                 </div>
-              </>
             )}
-          </div>
         </>
-      )}
-    </>
-  );
+    );
 };
 
 export default MentorProfileCard;

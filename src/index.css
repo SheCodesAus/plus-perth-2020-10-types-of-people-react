@@ -84,6 +84,13 @@ i {
     color: var(--white-color);
 }
 
+/* MARGIN */
+
+.margin-bottom {
+    margin-bottom: 1.5rem;
+    display: block;
+}
+
 /* BUTTONS */
 
 .btn {
