@@ -5,10 +5,10 @@ import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
 
 const MentorProfileCard = (props) => {
+  //props is userData
   const [mentorDataProfile, setMentorDataProfile] = useState({});
   let user = window.localStorage.getItem("username");
   const [isBusy, setBusy] = useState(true);
-
   const [eventsAttended, setEventsAttended] = useState([]);
 
   const fetchMentorEvents = async () => {

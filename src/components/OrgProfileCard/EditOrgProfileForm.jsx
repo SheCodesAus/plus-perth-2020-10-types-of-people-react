@@ -28,10 +28,10 @@ function EditProfileFrom(props) {
     setPublicProfile({
       company_name:
         //undefined or null
-        orgDataProfile != null ? orgDataProfile.company_name : null,
-      contact_name: orgDataProfile != null ? orgDataProfile.contact_name : null,
-      org_bio: orgDataProfile != null ? orgDataProfile.org_bio : null,
-      org_image: orgDataProfile != null ? orgDataProfile.org_image : null,
+        orgDataProfile === null ? " " : orgDataProfile.company_name,
+      contact_name: orgDataProfile === null ? " " : orgDataProfile.contact_name,
+      org_bio: orgDataProfile === null ? " " : orgDataProfile.org_bio,
+      org_image: orgDataProfile === null ? " " : orgDataProfile.org_image,
     });
   }, [userData, orgDataProfile]);
   // console.log("profile", public_profile);

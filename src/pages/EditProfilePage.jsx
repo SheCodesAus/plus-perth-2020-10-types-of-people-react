@@ -41,7 +41,8 @@ function EditProfilePage() {
       const data = await response.json();
       if (data) {
         setOrgDataProfile(data);
-        setBusy(false);
+        // setBusy(false);
+        console.log(data);
       }
       return;
     }
@@ -54,29 +55,34 @@ function EditProfilePage() {
     );
     if (response.ok) {
       const data = await response.json();
+      console.log(response);
       if (data) {
         setMentorDataProfile(data);
         // setBusy(false);
+        console.log(data);
       }
       return;
     }
     const data = await response.json();
   };
+
   useEffect(() => {
     fetchUser();
-    userData.is_org != undefined ? (
-      userData.is_org ? (
-        fetchOrgProfile()
-      ) : (
-        fetchMentorProfile()
-      )
-    ) : (
-      <></>
-    );
-    // userData.is_org ? fetchOrgProfile() : fetchMentorProfile();
-    // setBusy(false);
   }, []);
-  console.log("profile", mentorDataProfile);
+  console.log(userData.is_org);
+
+  useEffect(() => {
+    // userData.is_org != undefined ? (
+    //   userData.is_org ? (
+    //     fetchOrgProfile()
+    //   ) : (
+    //     fetchMentorProfile()
+    //   )
+    // ) : (
+    //   <></>
+    // );
+    userData.is_org ? fetchOrgProfile() : fetchMentorProfile();
+  }, []);
 
   return (
     <div className="container">
