@@ -54,10 +54,8 @@ const OrgProfileCard = (props) => {
     email: props.props.email,
     company_name: OrgDataProfile.company_name,
     contact_name: OrgDataProfile.contact_name,
+    org_image: OrgDataProfile.org_image,
     org_bio: OrgDataProfile.org_bio,
-    image:
-      "https://cdn.shecodes.com.au/wp-content/uploads/2018/10/SheCodes-01.png",
-    // OrgDataProfile.image,
   };
 
   // const [events, setEvents] = useState(eventsHosted);
@@ -124,7 +122,11 @@ const OrgProfileCard = (props) => {
                     <div id="o-profile-right">
                       <img
                         id="o-profile-image"
-                        src={org_profile.image}
+                        src=
+                        {OrgDataProfile.org_image === null ?
+                          "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg" :
+                          org_profile.org_image
+                        }
                         alt={org_profile.name}
                       />
                     </div>
