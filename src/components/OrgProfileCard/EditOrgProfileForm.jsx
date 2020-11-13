@@ -16,6 +16,7 @@ function EditProfileFrom(props) {
         company_name: "",
         org_bio: "",
         contact_name: "",
+        org_image: "",
     });
 
     useEffect(() => {
@@ -30,10 +31,12 @@ function EditProfileFrom(props) {
             contact_name:
                 userDataProfile != null ? userDataProfile.contact_name : null,
             org_bio: userDataProfile != null ? userDataProfile.org_bio : null,
+            org_image: userDataProfile != null ? userDataProfile.org_image : null,
         });
     }, [userData, userDataProfile]);
-    // console.log("profile", public_profile);
 
+    console.log("This is the user data profile", userDataProfile)
+    
     const handleChange = (e) => {
         const { id, value } = e.target;
         setPublicProfile((prevCredentials) => ({
@@ -56,6 +59,7 @@ function EditProfileFrom(props) {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json",
+                    Accept: "application/json",
                     Authorization: `Token ${token}`,
                 },
                 body: JSON.stringify(credentials),
@@ -72,16 +76,18 @@ function EditProfileFrom(props) {
                 body: JSON.stringify(publicProfile),
             }
         );
+        console.log("this is the response", response)
         return response.json();
     };
 
+    
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Submit pressed");
         if (credentials.username) {
             editData().then((response) => {
                 // setBusy(false);
-                console.log(response);
+                console.log("This is the response on submit", response);
                 // window.localStorage.setItem("username", credentials.username);
                 history.push(`/profile/${username}`);
             });
@@ -123,6 +129,15 @@ function EditProfileFrom(props) {
                     type="text"
                     id="contact_name"
                     defaultValue={publicProfile.contact_name}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="form-item">
+                <label htmlFor="org_image">Profile Image:</label>
+                <input
+                    type="url"
+                    id="org_image"
+                    defaultValue={publicProfile.org_image}
                     onChange={handleChange}
                 />
             </div>
