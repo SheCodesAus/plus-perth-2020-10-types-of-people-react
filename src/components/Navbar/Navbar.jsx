@@ -68,7 +68,7 @@ const Navbar = () => {
                 to={`/profile/${username}`}
                 // onClick={reloadprofile}
               >
-                {username}Profile
+                {username}
               </Link>
               <Link className="navbar-menu-item" to="/" onClick={logout}>
                 Logout
