@@ -11,7 +11,7 @@ import "./MentorProfileCard.css";
 function EditProfileFrom(props) {
   const history = useHistory();
   const { userData, mentorDataProfile } = props;
-  let username = localStorage.username;
+  let username = window.localStorage.getItem("username");
   const [categoryData, setCategoryData] = useState([]);
 
   // set data...[account]
@@ -137,7 +137,6 @@ function EditProfileFrom(props) {
 
   const editData = async () => {
     let token = window.localStorage.getItem("token");
-    let username = localStorage.username;
 
     const response1 = await fetch(
       `${process.env.REACT_APP_API_URL}users/${username}/`,
@@ -151,6 +150,7 @@ function EditProfileFrom(props) {
         body: JSON.stringify(credentials),
       }
     );
+
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`,
       {
@@ -172,6 +172,7 @@ function EditProfileFrom(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("JSON", JSON.stringify({ publicProfile }));
     console.log("Submit pressed");
     if (credentials.username) {
       editData().then((response) => {

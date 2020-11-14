@@ -46,7 +46,7 @@ const MentorProfileCard = (props) => {
   };
   useEffect(() => {
     fetchMentor();
-    fetchMentorEvents();
+    // fetchMentorEvents();
   }, []);
 
   const mentor_profile = {
@@ -114,11 +114,11 @@ const MentorProfileCard = (props) => {
           <div id="m-profile-section-3">
             {/* <h3>Events I've signed up for</h3> */}
             <h3>Events I've mentored at</h3>
-            <div className="event-grid">
+            {/* <div className="event-grid">
               {eventsAttended.map((eventData, key) => {
                 return <EventCard key={key} eventData={eventData} />;
               })}
-            </div>
+            </div> */}
           </div>
         </>
       )}

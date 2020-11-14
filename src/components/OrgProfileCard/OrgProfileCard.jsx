@@ -82,8 +82,8 @@ const OrgProfileCard = (props) => {
         <p>loading</p>
       ) : (
         <>
-          <div id="profile-exist">
-            {(org_profile.company_name === null ||
+          {/* <div id="profile-exist"> */}
+          {/* {(org_profile.company_name === null ||
               org_profile.company_name === undefined) &&
             // (org_profile.org_image === null || org_profile.org_image === undefined)&&
             (org_profile.org_bio === null ||
@@ -104,34 +104,33 @@ const OrgProfileCard = (props) => {
                   <p></p>
                 )}
               </div>
-            ) : (
-              <>
-                <div id="o-profile-sections-1-2">
-                  <div id="o-profile-section-1">
-                    <div id="o-profile-left">
-                      <h1>{org_profile.company_name}</h1>
-                      <h3>{org_profile.username}</h3>
-                      <h3>Is organisation: {org_profile.is_org}</h3>
-                      <h5>Contact person: {org_profile.contact_name}</h5>
-                      <h5>{org_profile.email}</h5>
-                      <IsOwnerCanEdit />
-                    </div>
-                    <div id="o-profile-right">
-                      <img
-                        id="o-profile-image"
-                        src={org_profile.org_image}
-                        alt={org_profile.name}
-                      />
-                    </div>
-                  </div>
-                  <div id="o-profile-section-2">
-                    <h3>Bio</h3>
-                    <p>{org_profile.org_bio}</p>
-                  </div>
+            ) : ( */}
+          <>
+            <div id="o-profile-sections-1-2">
+              <div id="o-profile-section-1">
+                <div id="o-profile-left">
+                  <h1>{org_profile.company_name}</h1>
+                  <h3>{org_profile.username}</h3>
+                  <h5>Contact person: {org_profile.contact_name}</h5>
+                  <h5>{org_profile.email}</h5>
+                  <IsOwnerCanEdit />
                 </div>
-              </>
-            )}
-          </div>
+                <div id="o-profile-right">
+                  <img
+                    id="o-profile-image"
+                    src={org_profile.org_image}
+                    alt={org_profile.name}
+                  />
+                </div>
+              </div>
+              <div id="o-profile-section-2">
+                <h3>Bio</h3>
+                <p>{org_profile.org_bio}</p>
+              </div>
+            </div>
+          </>
+          {/* )} */}
+          {/* </div> */}
         </>
       )}
       <div id="m-profile-section-3">

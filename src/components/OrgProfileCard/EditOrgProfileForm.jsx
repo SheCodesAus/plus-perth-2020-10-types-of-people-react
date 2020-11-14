@@ -26,9 +26,8 @@ function EditProfileFrom(props) {
       email: userData.email,
     });
     setPublicProfile({
-      company_name:
-        //undefined or null
-        orgDataProfile === null ? " " : orgDataProfile.company_name,
+      //undefined or null
+      company_name: orgDataProfile === null ? " " : orgDataProfile.company_name,
       contact_name: orgDataProfile === null ? " " : orgDataProfile.contact_name,
       org_bio: orgDataProfile === null ? " " : orgDataProfile.org_bio,
       org_image: orgDataProfile === null ? " " : orgDataProfile.org_image,
