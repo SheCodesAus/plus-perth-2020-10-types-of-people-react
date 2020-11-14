@@ -11,7 +11,7 @@ function EditProfilePage() {
   const { username } = useParams();
   const [LoggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
-  let username_ST = window.localStorage.getItem("username");
+  // let username_ST = window.localStorage.getItem("username");
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");
@@ -35,14 +35,13 @@ function EditProfilePage() {
 
   const fetchOrgProfile = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/org/${username_ST}/profile/`
+      `${process.env.REACT_APP_API_URL}users/org/${username}/profile/`
     );
     if (response.ok) {
       const data = await response.json();
       if (data) {
         setOrgDataProfile(data);
         // setBusy(false);
-        console.log(data);
       }
       return;
     }
@@ -51,15 +50,13 @@ function EditProfilePage() {
 
   const fetchMentorProfile = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/mentor/${username_ST}/profile/`
+      `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`
     );
     if (response.ok) {
       const data = await response.json();
-      //   console.log(response);
       if (data) {
         setMentorDataProfile(data);
         // setBusy(false);
-        // console.log(data);
       }
       return;
     }

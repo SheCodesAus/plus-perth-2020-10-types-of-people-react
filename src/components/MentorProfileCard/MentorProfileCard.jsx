@@ -13,7 +13,7 @@ const MentorProfileCard = (props) => {
 
   const fetchMentorEvents = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}events/${props.props.username}/mentor-attendance/`
+      `${process.env.REACT_APP_API_URL}events/${user}/mentor-attendance/`
     );
     if (response.ok) {
       // console.log(response);
@@ -30,7 +30,7 @@ const MentorProfileCard = (props) => {
 
   const fetchMentor = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/mentor/${props.props.username}/profile/`
+      `${process.env.REACT_APP_API_URL}users/mentor/${user}/profile/`
     );
     if (response.ok) {
       // console.log(response);
@@ -46,7 +46,7 @@ const MentorProfileCard = (props) => {
   };
   useEffect(() => {
     fetchMentor();
-    // fetchMentorEvents();
+    fetchMentorEvents();
   }, []);
 
   const mentor_profile = {
@@ -114,11 +114,11 @@ const MentorProfileCard = (props) => {
           <div id="m-profile-section-3">
             {/* <h3>Events I've signed up for</h3> */}
             <h3>Events I've mentored at</h3>
-            {/* <div className="event-grid">
+            <div className="event-grid">
               {eventsAttended.map((eventData, key) => {
                 return <EventCard key={key} eventData={eventData} />;
               })}
-            </div> */}
+            </div>
           </div>
         </>
       )}

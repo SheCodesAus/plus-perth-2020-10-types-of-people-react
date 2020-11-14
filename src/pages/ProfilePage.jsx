@@ -26,7 +26,6 @@ const ProfilePage = () => {
   useEffect(() => {
     fetchUser();
   }, []);
-  console.log(userData);
 
   return (
     <div id="profile-page" className="container">

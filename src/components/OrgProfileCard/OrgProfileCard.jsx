@@ -11,7 +11,7 @@ const OrgProfileCard = (props) => {
 
   const fetchOrg = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/org/${props.props.username}/profile/`
+      `${process.env.REACT_APP_API_URL}users/org/${user}/profile/`
     );
     if (response.ok) {
       const data = await response.json();
@@ -26,7 +26,7 @@ const OrgProfileCard = (props) => {
 
   const fetchOrgEvents = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}events/${props.props.username}/events-hosted/`
+      `${process.env.REACT_APP_API_URL}events/${user}/events-hosted/`
     );
     if (response.ok) {
       const data = await response.json();
