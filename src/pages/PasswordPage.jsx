@@ -21,7 +21,8 @@ const PasswordPage = () => {
         {
           method: "PUT",
           headers: {
-            Authentication: `Token 15adefa28df56850aa806f090119480c6974a52d`,
+            "Content-Type": "application/json",
+            Authorization: `Token 15adefa28df56850aa806f090119480c6974a52d`,
           },
           data: JSON.stringify({
             old_password: passwordDetails.currentPassword,
@@ -38,7 +39,8 @@ const PasswordPage = () => {
         alert("Could not update password");
       }
     } catch (err) {
-      alert(`Network error: ${err.message}`);
+      console.log(err);
+      //   alert(`Network error: ${err.message}`);
     }
   };
 
