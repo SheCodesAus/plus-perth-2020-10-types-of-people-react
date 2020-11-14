@@ -14,15 +14,16 @@ const PasswordPage = () => {
   const onSubmit = async (passwordDetails, resetForm) => {
     try {
       console.log("--->", passwordDetails);
+      let username = window.localStorage.getItem("username");
       const token = window.localStorage.getItem("token");
       console.log("token", token);
       const response = await fetch(
-        "https://binary-api.herokuapp.com/users/admin/update-password/",
+        `${process.env.REACT_APP_API_URL}users/${username}/update-password/`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Token 15adefa28df56850aa806f090119480c6974a52d`,
+            Authorization: `Token ${token}`,
           },
           data: JSON.stringify({
             old_password: passwordDetails.currentPassword,
