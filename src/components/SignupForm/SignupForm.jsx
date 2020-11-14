@@ -50,7 +50,7 @@ const SignupForm = () => {
     postData().then((response) => {
       console.log(response);
       if (response.status === 201) {
-        window.localStorage.setItem("username", credentials.username);
+        // window.localStorage.setItem("token", token);
         history.push("/login");
       } else {
         alert("this username has already exists");

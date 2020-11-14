@@ -61,7 +61,8 @@ function EditProfileFrom(props) {
         mentorDataProfile === null ? " " : mentorDataProfile.mentor_image,
     });
     setLocationData({
-      location: mentorDataProfile != null ? mentorDataProfile.location : null,
+      location: mentorDataProfile === null ? " " : mentorDataProfile.location,
+      // location: mentorDataProfile != null ? mentorDataProfile.location : null,
     });
   }, [userData, mentorDataProfile]);
   //   console.log(mentorDataProfile.bio);
@@ -138,20 +139,28 @@ function EditProfileFrom(props) {
   const editData = async () => {
     let token = window.localStorage.getItem("token");
 
-    const response1 = await fetch(
-      `${process.env.REACT_APP_API_URL}users/${username}/`,
-      {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify(credentials),
-      }
+    const fetch1 = fetch(`${process.env.REACT_APP_API_URL}users/${username}/`, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    const data = {
+      ...publicProfile,
+      location: locationData.location,
+      latitude: locationData.latitude,
+      longitude: locationData.longitude,
+    };
+    const cleanData = Object.fromEntries(
+      // strip out things that are null
+      Object.entries(data).filter(([k, v]) => v != null)
     );
 
-    const response = await fetch(
+    const fetch2 = fetch(
       `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`,
       {
         method: "put",
@@ -159,15 +168,13 @@ function EditProfileFrom(props) {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify({
-          ...publicProfile,
-          location: locationData.location,
-          latitude: locationData.latitude,
-          longitude: locationData.longitude,
-        }),
+        body: JSON.stringify(cleanData),
       }
     );
-    return response.json();
+
+    const responses = await Promise.all([fetch1, fetch2]);
+    console.log({ responses });
+    return;
   };
 
   const handleSubmit = (e) => {
@@ -176,7 +183,7 @@ function EditProfileFrom(props) {
     console.log("Submit pressed");
     if (credentials.username) {
       editData().then((response) => {
-        console.log(response);
+        // console.log(response);
         history.push(`/profile/${username}`);
       });
     }

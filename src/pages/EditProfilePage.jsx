@@ -4,7 +4,7 @@ import EditOrgProfileForm from "../components/OrgProfileCard/EditOrgProfileForm"
 import EditMentorProfileForm from "../components/MentorProfileCard/EditMentorProfileForm";
 
 function EditProfilePage() {
-  const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({ loading: true });
   const [orgDataProfile, setOrgDataProfile] = useState({});
   const [mentorDataProfile, setMentorDataProfile] = useState({});
   const [isBusy, setBusy] = useState(true);
@@ -55,11 +55,11 @@ function EditProfilePage() {
     );
     if (response.ok) {
       const data = await response.json();
-      console.log(response);
+      //   console.log(response);
       if (data) {
         setMentorDataProfile(data);
         // setBusy(false);
-        console.log(data);
+        // console.log(data);
       }
       return;
     }
@@ -69,43 +69,46 @@ function EditProfilePage() {
   useEffect(() => {
     fetchUser();
   }, []);
-  console.log(userData.is_org);
 
   useEffect(() => {
-    // userData.is_org != undefined ? (
-    //   userData.is_org ? (
-    //     fetchOrgProfile()
-    //   ) : (
-    //     fetchMentorProfile()
-    //   )
-    // ) : (
-    //   <></>
-    // );
-    userData.is_org ? fetchOrgProfile() : fetchMentorProfile();
-  }, []);
+    if (!userData.loading) {
+      userData.is_org ? fetchOrgProfile() : fetchMentorProfile();
+    }
+  }, [userData]);
 
   return (
     <div className="container">
       <Link className="margin-bottom" to={`/profile/${username}`}>
         Back to profile
       </Link>
-      {isBusy ? (
+      {/* {isBusy ? (
         <p>loading</p>
       ) : // ) : LoggedIn && username_ST == username ? (
-      LoggedIn ? (
-        <>
-          {userData.is_org ? (
-            <EditOrgProfileForm
-              userData={userData}
-              orgDataProfile={orgDataProfile}
-            />
-          ) : (
-            <EditMentorProfileForm
-              userData={userData}
-              mentorDataProfile={mentorDataProfile}
-            />
-          )}
-        </>
+      isBusy2 ? (
+        <p>Loading profile data</p>
+      ) : // ) : LoggedIn && use */}
+      {LoggedIn ? (
+        isBusy ? (
+          <p>loading</p>
+        ) : (
+          <>
+            {!userData.loading ? (
+              userData.is_org ? (
+                <EditOrgProfileForm
+                  userData={userData}
+                  orgDataProfile={orgDataProfile}
+                />
+              ) : (
+                <EditMentorProfileForm
+                  userData={userData}
+                  mentorDataProfile={mentorDataProfile}
+                />
+              )
+            ) : (
+              <></>
+            )}
+          </>
+        )
       ) : (
         <>
           <p>Login to create a profile </p>
