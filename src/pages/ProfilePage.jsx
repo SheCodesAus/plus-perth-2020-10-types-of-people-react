@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
-import EventCard from "../components/EventCard/EventCard";
+import { useParams } from "react-router-dom";
 import MentorProfileCard from "../components/MentorProfileCard/MentorProfileCard";
 import OrgProfileCard from "../components/OrgProfileCard/OrgProfileCard";
 

@@ -2,14 +2,39 @@ import { useHistory } from "react-router-dom";
 import React, { Fragment, useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
+import usePlacesAutocomplete, {
+  getGeocode,
+  getLatLng,
+} from "use-places-autocomplete";
 import "./MentorProfileCard.css";
 
 function EditProfileFrom(props) {
   const history = useHistory();
   const { userData, mentorDataProfile } = props;
-  let username = localStorage.username;
+  let username = window.localStorage.getItem("username");
   const [categoryData, setCategoryData] = useState([]);
 
+  // set data...[account]
+  const [credentials, setCredentials] = useState({
+    username: "",
+    email: "",
+  });
+
+  // ...[profile]
+  const [publicProfile, setPublicProfile] = useState({
+    name: "",
+    bio: "",
+    skills: [],
+    mentor_image: "",
+  });
+
+  // ...[profile/location]
+  const [locationData, setLocationData] = useState({
+    latitude: null,
+    longitude: null,
+    location: "",
+  });
+  // on load, set categories to choose from
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}events/categories/`)
       .then((results) => {
@@ -22,35 +47,81 @@ function EditProfileFrom(props) {
 
   const category_option = categoryData.map((category) => category.category);
 
-  const [credentials, setCredentials] = useState({
-    username: "",
-    email: "",
-  });
-
-  const [public_profile, SetPublic_profile] = useState({
-    name: "",
-    bio: "",
-    skills: [],
-    location: "",
-  });
-
+  // on load set current values in form
   useEffect(() => {
     setCredentials({
       username: userData.username,
       email: userData.email,
     });
-    SetPublic_profile({
+    setPublicProfile({
       bio: mentorDataProfile === null ? " " : mentorDataProfile.bio,
       name: mentorDataProfile === undefined ? " " : mentorDataProfile.name,
       skills: mentorDataProfile === null ? " " : mentorDataProfile.skills,
-      // skills: mentorDataProfile.skills,
-      location:
-        mentorDataProfile === undefined ? " " : mentorDataProfile.location,
+      mentor_image:
+        mentorDataProfile === null ? " " : mentorDataProfile.mentor_image,
+    });
+    setLocationData({
+      location: mentorDataProfile === null ? " " : mentorDataProfile.location,
+      // location: mentorDataProfile != null ? mentorDataProfile.location : null,
     });
   }, [userData, mentorDataProfile]);
+  //   console.log(mentorDataProfile.bio);
+
+  // Unpacking the data from usePlacesAutocomplete library
+  const {
+    ready,
+    value,
+    suggestions: { status, data },
+    setValue,
+    clearSuggestions,
+  } = usePlacesAutocomplete({
+    debounce: 300,
+  });
+
+  // Handling input for location
+  const handleInput = (e) => {
+    setValue(e.target.value);
+  };
+
+  // Setting state as the user selects a suggestion
+  const handleSelect = ({ description }) => () => {
+    setValue(description, false);
+    clearSuggestions();
+
+    // Get latitude and longitude via utility functions
+    getGeocode({ address: description })
+      .then((results) => getLatLng(results[0]))
+      .then(({ lat, lng }) => {
+        setLocationData({
+          latitude: lat,
+          longitude: lng,
+          location: description,
+        });
+      })
+      .catch((error) => {
+        console.log("Error:", error);
+      });
+  };
+
+  // Rendering the suggestions from the api as input changes
+  const renderSuggestions = () =>
+    data.map((suggestion) => {
+      // Unpack suggestion
+      const {
+        id,
+        structured_formatting: { main_text, secondary_text },
+      } = suggestion;
+
+      // Render list of suggestions
+      return (
+        <li key={id} onClick={handleSelect(suggestion)}>
+          <strong>{main_text}</strong> <small>{secondary_text}</small>
+        </li>
+      );
+    });
 
   const updateCat = (newCat) => {
-    SetPublic_profile({ ...public_profile, skills: newCat });
+    setPublicProfile({ ...publicProfile, skills: newCat });
   };
 
   const handleChange = (e) => {
@@ -59,7 +130,7 @@ function EditProfileFrom(props) {
       ...prevCredentials,
       [id]: value,
     }));
-    SetPublic_profile((prevCredentials) => ({
+    setPublicProfile((prevCredentials) => ({
       ...prevCredentials,
       [id]: value,
     }));
@@ -67,20 +138,29 @@ function EditProfileFrom(props) {
 
   const editData = async () => {
     let token = window.localStorage.getItem("token");
-    let username = localStorage.username;
 
-    const response1 = await fetch(
-      `${process.env.REACT_APP_API_URL}users/${username}/`,
-      {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify(credentials),
-      }
+    const fetch1 = fetch(`${process.env.REACT_APP_API_URL}users/${username}/`, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    const data = {
+      ...publicProfile,
+      location: locationData.location,
+      latitude: locationData.latitude,
+      longitude: locationData.longitude,
+    };
+    const cleanData = Object.fromEntries(
+      // strip out things that are null
+      Object.entries(data).filter(([k, v]) => v != null)
     );
-    const response = await fetch(
+
+    const fetch2 = fetch(
       `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`,
       {
         method: "put",
@@ -88,19 +168,22 @@ function EditProfileFrom(props) {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify(public_profile),
+        body: JSON.stringify(cleanData),
       }
     );
-    return response.json();
+
+    const responses = await Promise.all([fetch1, fetch2]);
+    // console.log({ responses });
+    return;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("JSON", JSON.stringify({ publicProfile }));
     console.log("Submit pressed");
     if (credentials.username) {
       editData().then((response) => {
-        console.log(response);
-        // window.localStorage.setItem("username", credentials.username);
+        // console.log(response);
         history.push(`/profile/${username}`);
       });
     }
@@ -108,15 +191,6 @@ function EditProfileFrom(props) {
 
   return (
     <form className="form">
-      {/* <div className="form-item">
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={credentials.username}
-          onChange={handleChange}
-        />
-      </div> */}
       <div className="form-item">
         <label htmlFor="email">Email:</label>
         <input
@@ -131,7 +205,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="name"
-          defaultValue={public_profile.name}
+          value={publicProfile.name}
           onChange={handleChange}
         />
       </div>
@@ -140,28 +214,35 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="bio"
-          defaultValue={public_profile.bio}
+          defaultValue={publicProfile.bio}
           onChange={handleChange}
         />
       </div>
       <div className="form-item">
-        <label htmlFor="location">Location:</label>
+        <label htmlFor="mentor_image">Image</label>
         <input
-          type="text"
-          id="location"
-          defaultValue={public_profile.location}
+          type="url"
+          id="mentor_image"
+          defaultValue={publicProfile.mentor_image}
           onChange={handleChange}
         />
       </div>
-      {/* <div className="form-item">
-        <label htmlFor="skills">Skills:</label>
+      <div className="form-item">
+        <label htmlFor="location">Event location</label>
         <input
-          type="text"
-          id="categories"
-          value={public_profile.skills}
-          onChange={handleChange}
+          id="location"
+          value={value}
+          onChange={handleInput}
+          disabled={!ready}
+          placeholder="Where would you like to see events?"
         />
-      </div> */}
+      </div>
+      {status === "OK" && (
+        <div className="form-item">
+          <label></label>
+          <ul className="location-options">{renderSuggestions()}</ul>
+        </div>
+      )}
       <div className="form-item">
         <Fragment>
           <div className="category-item-container">
@@ -170,12 +251,10 @@ function EditProfileFrom(props) {
               <Typeahead
                 id="skills"
                 labelKey="skills"
-                // defaultValue={public_profile.skills}
                 multiple
                 onChange={updateCat}
                 options={category_option}
-                // placeholder="Choose categories..."
-                selected={public_profile.skills}
+                selected={publicProfile.skills}
               />
             </Form.Group>
           </div>

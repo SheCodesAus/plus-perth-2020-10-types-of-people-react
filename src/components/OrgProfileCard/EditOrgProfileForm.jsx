@@ -4,18 +4,19 @@ import { useHistory } from "react-router-dom";
 
 function EditProfileFrom(props) {
   const history = useHistory();
-  const { userData, userDataProfile } = props;
-  let username = localStorage.username;
+  const { orgDataProfile, userData } = props;
+  let username = window.localStorage.getItem("username");
 
   const [credentials, setCredentials] = useState({
     username: "",
     email: "",
   });
 
-  const [public_profile, setPublic_profile] = useState({
+  const [publicProfile, setPublicProfile] = useState({
     company_name: "",
     org_bio: "",
     contact_name: "",
+    org_image: "",
   });
 
   useEffect(() => {
@@ -23,20 +24,19 @@ function EditProfileFrom(props) {
       username: userData.username,
       email: userData.email,
     });
-    setPublic_profile({
-      company_name:
-        //undefined or null
-        userDataProfile === null ? " " : userDataProfile.company_name,
-      contact_name:
-        userDataProfile === null ? " " : userDataProfile.contact_name,
-      org_bio: userDataProfile === null ? " " : userDataProfile.org_bio,
+    setPublicProfile({
+      //undefined or null
+      company_name: orgDataProfile === null ? " " : orgDataProfile.company_name,
+      contact_name: orgDataProfile === null ? " " : orgDataProfile.contact_name,
+      org_bio: orgDataProfile === null ? " " : orgDataProfile.org_bio,
+      org_image: orgDataProfile === null ? " " : orgDataProfile.org_image,
     });
-  }, [userData, userDataProfile]);
+  }, [userData, orgDataProfile]);
   // console.log("profile", public_profile);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setPublic_profile((prevCredentials) => ({
+    setPublicProfile((prevCredentials) => ({
       ...prevCredentials,
       [id]: value,
     }));
@@ -48,20 +48,22 @@ function EditProfileFrom(props) {
 
   const editData = async () => {
     let token = window.localStorage.getItem("token");
-    let username = localStorage.username;
 
-    const response1 = await fetch(
-      `${process.env.REACT_APP_API_URL}users/${username}/`,
-      {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify(credentials),
-      }
+    const fetch1 = fetch(`${process.env.REACT_APP_API_URL}users/${username}/`, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    const cleanData = Object.fromEntries(
+      // strip out things that are null
+      Object.entries(publicProfile).filter(([k, v]) => v != null)
     );
-    const response = await fetch(
+
+    const fetch2 = fetch(
       `${process.env.REACT_APP_API_URL}users/org/${username}/profile/`,
       {
         method: "put",
@@ -69,10 +71,11 @@ function EditProfileFrom(props) {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify(public_profile),
+        body: JSON.stringify(cleanData),
       }
     );
-    return response.json();
+    const responses = await Promise.all([fetch1, fetch2]);
+    return;
   };
 
   const handleSubmit = (e) => {
@@ -113,7 +116,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="company_name"
-          defaultValue={public_profile.company_name}
+          defaultValue={publicProfile.company_name}
           onChange={handleChange}
         />
       </div>
@@ -122,7 +125,7 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="contact_name"
-          defaultValue={public_profile.contact_name}
+          defaultValue={publicProfile.contact_name}
           onChange={handleChange}
         />
       </div>
@@ -131,7 +134,16 @@ function EditProfileFrom(props) {
         <input
           type="text"
           id="org_bio"
-          defaultValue={public_profile.org_bio}
+          defaultValue={publicProfile.org_bio}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="form-item">
+        <label htmlFor="org_image">Image:</label>
+        <input
+          type="url"
+          id="org_image"
+          defaultValue={publicProfile.org_image}
           onChange={handleChange}
         />
       </div>
