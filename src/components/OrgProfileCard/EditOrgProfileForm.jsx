@@ -5,9 +5,8 @@ import { useHistory } from "react-router-dom";
 function EditProfileFrom(props) {
   const history = useHistory();
   const { orgDataProfile, userData } = props;
-  console.log(props);
+  let username = window.localStorage.getItem("username");
 
-  let username = localStorage.username;
   const [credentials, setCredentials] = useState({
     username: "",
     email: "",
@@ -49,20 +48,22 @@ function EditProfileFrom(props) {
 
   const editData = async () => {
     let token = window.localStorage.getItem("token");
-    let username = localStorage.username;
 
-    const response1 = await fetch(
-      `${process.env.REACT_APP_API_URL}users/${username}/`,
-      {
-        method: "put",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Token ${token}`,
-        },
-        body: JSON.stringify(credentials),
-      }
+    const fetch1 = fetch(`${process.env.REACT_APP_API_URL}users/${username}/`, {
+      method: "put",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Token ${token}`,
+      },
+      body: JSON.stringify(credentials),
+    });
+
+    const cleanData = Object.fromEntries(
+      // strip out things that are null
+      Object.entries(publicProfile).filter(([k, v]) => v != null)
     );
-    const response = await fetch(
+
+    const fetch2 = fetch(
       `${process.env.REACT_APP_API_URL}users/org/${username}/profile/`,
       {
         method: "put",
@@ -70,10 +71,11 @@ function EditProfileFrom(props) {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify(publicProfile),
+        body: JSON.stringify(cleanData),
       }
     );
-    return response.json();
+    const responses = await Promise.all([fetch1, fetch2]);
+    return;
   };
 
   const handleSubmit = (e) => {

@@ -173,7 +173,7 @@ function EditProfileFrom(props) {
     );
 
     const responses = await Promise.all([fetch1, fetch2]);
-    console.log({ responses });
+    // console.log({ responses });
     return;
   };
 
