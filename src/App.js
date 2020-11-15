@@ -15,6 +15,7 @@ import DeleteUserPage from "./pages/DeleteUserPage";
 import EditEventPage from "./pages/EditEventPage";
 import DeleteEventPage from "./pages/DeleteEventPage";
 import FilterEventsPage from "./pages/FilterEventPage";
+import MentorAttendedPage from "./pages/MentorAttendedPage";
 
 
 function App() {
@@ -28,6 +29,9 @@ function App() {
                 </Route> */}
                 <Route path="/events/filter">
                     <FilterEventsPage />
+                </Route>
+                <Route path="/events/:id/attended">
+                    <MentorAttendedPage />
                 </Route>
                 <Route path="/events/:id/edit">
                     <EditEventPage />
