@@ -65,6 +65,9 @@ const OrgProfileCard = (props) => {
           <Link to={`/profile/${user}/edit`}>
             <p>Edit</p>
           </Link>
+          <Link to={`/profile/${user}/password`}>
+            <p>Change Password</p>
+          </Link>
           <Link to={`/profile/${user}/delete`}>
             <p>Delete</p>
           </Link>
@@ -82,29 +85,6 @@ const OrgProfileCard = (props) => {
         <p>loading</p>
       ) : (
         <>
-          {/* <div id="profile-exist"> */}
-          {/* {(org_profile.company_name === null ||
-              org_profile.company_name === undefined) &&
-            // (org_profile.org_image === null || org_profile.org_image === undefined)&&
-            (org_profile.org_bio === null ||
-              org_profile.org_bio === undefined) &&
-            (org_profile.contact_name === null ||
-              org_profile.contact_name === undefined) ? (
-              <div>
-                <h2>{org_profile.username}</h2>
-                <h2>There is no user profile set up for this user </h2>
-                {user === org_profile.username ? (
-                  <>
-                    <p>Tell us about the company</p>
-                    <IsOwnerCanEdit />
-                    <br></br>
-                    <p>Email: {org_profile.email}</p>
-                  </>
-                ) : (
-                  <p></p>
-                )}
-              </div>
-            ) : ( */}
           <>
             <div id="o-profile-sections-1-2">
               <div id="o-profile-section-1">
