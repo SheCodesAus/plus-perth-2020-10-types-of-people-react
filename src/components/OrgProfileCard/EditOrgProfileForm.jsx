@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 // import Loader from "react-loader-spinner";
 
 function EditProfileFrom(props) {
@@ -26,13 +26,15 @@ function EditProfileFrom(props) {
     });
     setPublicProfile({
       //undefined or null
-      company_name: orgDataProfile === null ? " " : orgDataProfile.company_name,
+      company_name:
+        orgDataProfile === null || orgDataProfile === undefined
+          ? " "
+          : orgDataProfile.company_name,
       contact_name: orgDataProfile === null ? " " : orgDataProfile.contact_name,
       org_bio: orgDataProfile === null ? " " : orgDataProfile.org_bio,
       org_image: orgDataProfile === null ? " " : orgDataProfile.org_image,
     });
   }, [userData, orgDataProfile]);
-  // console.log("profile", public_profile);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -80,12 +82,10 @@ function EditProfileFrom(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submit pressed");
+    // console.log("Submit pressed");
     if (credentials.username) {
       editData().then((response) => {
         // setBusy(false);
-        console.log(response);
-        // window.localStorage.setItem("username", credentials.username);
         history.push(`/profile/${username}`);
       });
     }
@@ -93,15 +93,6 @@ function EditProfileFrom(props) {
 
   return (
     <form className="form">
-      <div className="form-item">
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={credentials.username}
-          onChange={handleChange}
-        />
-      </div>
       <div className="form-item">
         <label htmlFor="email">Email:</label>
         <input
@@ -147,15 +138,11 @@ function EditProfileFrom(props) {
           onChange={handleChange}
         />
       </div>
-      {/* <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={credentials.password}
-          onChange={handleChange}
-        />
-      </div> */}
+      <div>
+        <Link to={`/${username}/password`}>
+          <p>Reset Password</p>
+        </Link>
+      </div>
       <button className="btn" type="submit" onClick={handleSubmit}>
         Update Account
       </button>
