@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import retrieveIcon from "../../utilities/retrieveIcon.js";
 import "./EventCard.css";
+import retrieveIcons from "../../utilities/retrieveIcons.js";
 
 const EventCard = (event) => {
-  const icon = retrieveIcon(event.eventData.category);
+  console.log(event.eventData.categories);
 
   return (
     <Link to={`/events/${event.eventData.id}`}>
@@ -20,8 +20,10 @@ const EventCard = (event) => {
             {event.eventData.event_date} | {event.eventData.event_name}
           </h5>
           <small>{event.eventData.organiser}</small>
-          {icon}
-          {event.eventData.category}
+          {retrieveIcons(event.eventData.categories).map((icon) => (
+            <>{icon}</>
+          ))}
+          {/* {event.eventData.categories} */}
         </div>
       </div>
     </Link>
