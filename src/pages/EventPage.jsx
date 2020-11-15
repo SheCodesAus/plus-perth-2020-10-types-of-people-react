@@ -3,6 +3,8 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import AddToCalendar from "react-add-to-calendar";
 import MentorRegisterForm from "../components/MentorRegisterForm/MentorRegisterForm";
 import retrieveIcon from "../utilities/retrieveIcon.js";
+import MentorAttendedPage from "./MentorAttendedPage";
+import { Button } from "react-bootstrap";
 
 const EventPage = () => {
   const { id } = useParams();
@@ -195,6 +197,11 @@ const EventPage = () => {
               )}
             </>
           )}
+          {!event_is_open() && (username===eventData.organiser) ? (
+              <Link className="navbar-menu-item" to={`/events/${id}/attended`}>
+              Confirm Mentor Attendance
+              </Link>
+          ) : ""}
           <ShowRegistrations />
         </div>
       )}
