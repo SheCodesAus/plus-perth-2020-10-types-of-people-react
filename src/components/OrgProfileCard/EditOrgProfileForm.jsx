@@ -94,15 +94,6 @@ function EditProfileFrom(props) {
   return (
     <form className="form">
       <div className="form-item">
-        <label htmlFor="username">Username:</label>
-        <input
-          type="text"
-          id="username"
-          value={credentials.username}
-          onChange={handleChange}
-        />
-      </div>
-      <div className="form-item">
         <label htmlFor="email">Email:</label>
         <input
           type="email"
