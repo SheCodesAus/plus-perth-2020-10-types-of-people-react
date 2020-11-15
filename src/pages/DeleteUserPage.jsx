@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import DeleteUserForm from "../components/MentorProfileCard/DeleteMentorForm";
+import DeleteUserForm from "../components/DeleteUserForm/DeleteUserForm";
 
 function DeleteProfilePage() {
   const [userData, setUserData] = useState({});

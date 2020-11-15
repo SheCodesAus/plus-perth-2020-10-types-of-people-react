@@ -5,15 +5,15 @@ import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
 
 const MentorProfileCard = (props) => {
-    const [mentorDataProfile, setMentorDataProfile] = useState({});
-    let user = window.localStorage.getItem("username");
-    const [isBusy, setBusy] = useState(true);
-
+  //props is userData
+  const [mentorDataProfile, setMentorDataProfile] = useState({});
+  let user = window.localStorage.getItem("username");
+  const [isBusy, setBusy] = useState(true);
   const [eventsAttended, setEventsAttended] = useState([]);
 
   const fetchMentorEvents = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}events/${props.props.username}/mentor-attendance/`
+      `${process.env.REACT_APP_API_URL}events/${user}/mentor-attendance/`
     );
     if (response.ok) {
       // console.log(response);
@@ -21,7 +21,7 @@ const MentorProfileCard = (props) => {
       if (data) {
         setEventsAttended(data);
         console.log(data);
-        setBusy(false);
+        // setBusy(false);
       }
       return;
     }
@@ -30,7 +30,7 @@ const MentorProfileCard = (props) => {
 
   const fetchMentor = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/mentor/${props.props.username}/profile/`
+      `${process.env.REACT_APP_API_URL}users/mentor/${user}/profile/`
     );
     if (response.ok) {
       // console.log(response);
@@ -55,9 +55,8 @@ const MentorProfileCard = (props) => {
     email: props.props.email,
     name: mentorDataProfile.name,
     bio: mentorDataProfile.bio,
-    image:
-      "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
-    // mentorDataProfile.image,
+    mentor_image: mentorDataProfile.mentor_image,
+    // "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
     skills: mentorDataProfile.skills,
     location: mentorDataProfile.location,
   };
@@ -78,51 +77,53 @@ const MentorProfileCard = (props) => {
     } else {
       return <p></p>;
     }
-    
-    return (
+  }
+
+  return (
+    <>
+      {isBusy ? (
+        <p>loading</p>
+      ) : (
         <>
-            {isBusy ? (
-                <p>loading</p>
-            ) : (
-              <>
-                <div id="m-profile-sections-1-2">
-                  <div id="m-profile-section-1">
-                    <div id="m-profile-left">
-                      <img
-                        id="m-profile-image"
-                        src={mentor_profile.image}
-                        alt={mentor_profile.username}
-                      />
-                    </div>
-                    <div id="m-profile-right">
-                      <h1>{mentor_profile.name}</h1>
-                      <IsOwnerCanEdit />
-                      <h2>{mentor_profile.username}</h2>
-                      <p>Email: {mentor_profile.email}</p>
-                      {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
-                      {retrieveIcons(mentor_profile.skills).map((icon) => (
-                        <>{icon}</>
-                      ))}
-                    </div>
-                  </div>
-                  <div id="m-profile-section-2">
-                    <h3>Bio</h3>
-                    <p>{mentor_profile.bio}</p>
-                    <p>{mentor_profile.location}</p>
-                  </div>
-                </div>
-                <div id="m-profile-section-3">
-                  {/* <h3>Events I've signed up for</h3> */}
-                  <h3>Events I've mentored at</h3>
-                  <div className="event-grid">
-                    {eventsAttended.map((eventData, key) => {
-                      return <EventCard key={key} eventData={eventData} />;
-                    })}
-                  </div>
-                </div>
-            )}
+          <div id="m-profile-sections-1-2">
+            <div id="m-profile-section-1">
+              <div id="m-profile-left">
+                <img
+                  id="m-profile-image"
+                  src={mentor_profile.mentor_image}
+                  alt={mentor_profile.username}
+                />
+              </div>
+              <div id="m-profile-right">
+                <h1>{mentor_profile.name}</h1>
+                <IsOwnerCanEdit />
+                <h2>{mentor_profile.username}</h2>
+                <p>Email: {mentor_profile.email}</p>
+                {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
+                {retrieveIcons(mentor_profile.skills).map((icon) => (
+                  <>{icon}</>
+                ))}
+              </div>
+            </div>
+            <div id="m-profile-section-2">
+              <h3>Bio</h3>
+              <p>{mentor_profile.bio}</p>
+              <p>{mentor_profile.location}</p>
+            </div>
+          </div>
+          <div id="m-profile-section-3">
+            {/* <h3>Events I've signed up for</h3> */}
+            <h3>Events I've mentored at</h3>
+            <div className="event-grid">
+              {eventsAttended.map((eventData, key) => {
+                return <EventCard key={key} eventData={eventData} />;
+              })}
+            </div>
+          </div>
         </>
-    );
+      )}
+    </>
+  );
 };
 
 export default MentorProfileCard;
