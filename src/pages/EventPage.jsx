@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import AddToCalendar from "react-add-to-calendar";
 import MentorRegisterForm from "../components/MentorRegisterForm/MentorRegisterForm";
-import retrieveIcon from "../utilities/retrieveIcon.js";
 import MentorAttendedPage from "./MentorAttendedPage";
 import { Button } from "react-bootstrap";
+import retrieveIcons from "../utilities/retrieveIcons.js";
 
 const EventPage = () => {
   const { id } = useParams();
@@ -14,7 +14,6 @@ const EventPage = () => {
   const location = useLocation();
   const [userData, setUserData] = useState({});
   let username = window.localStorage.getItem("username");
-  const icon = retrieveIcon(eventData.category);
 
   const fetchUser = async () => {
     const response = await fetch(
@@ -165,7 +164,9 @@ const EventPage = () => {
           <div id="event-page-image">
             <img src={eventData.event_image} alt="event image" />
           </div>
-          {icon}
+          {retrieveIcons(eventData.categories).map((icon) => (
+            <>{icon}</>
+          ))}
           <div id="status">
             <h3>Status: </h3>
             <h3>
@@ -197,11 +198,13 @@ const EventPage = () => {
               )}
             </>
           )}
-          {!event_is_open() && (username===eventData.organiser) ? (
-              <Link className="navbar-menu-item" to={`/events/${id}/attended`}>
+          {!event_is_open() && username === eventData.organiser ? (
+            <Link className="navbar-menu-item" to={`/events/${id}/attended`}>
               Confirm Mentor Attendance
-              </Link>
-          ) : ""}
+            </Link>
+          ) : (
+            ""
+          )}
           <ShowRegistrations />
         </div>
       )}
