@@ -52,7 +52,7 @@ h6 {
     font-family: var(--font-family-major);
     font-weight: 500;
     color: var(--dark-color);
-    margin: 1rem 0;
+    margin: 1rem 0 2rem 0;
 }
 
 i {
