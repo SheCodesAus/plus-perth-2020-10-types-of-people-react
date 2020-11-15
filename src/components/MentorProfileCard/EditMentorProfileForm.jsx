@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import React, { Fragment, useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
@@ -179,8 +179,7 @@ function EditProfileFrom(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("JSON", JSON.stringify({ publicProfile }));
-    console.log("Submit pressed");
+    // console.log("Submit pressed");
     if (credentials.username) {
       editData().then((response) => {
         // console.log(response);
@@ -259,6 +258,11 @@ function EditProfileFrom(props) {
             </Form.Group>
           </div>
         </Fragment>
+      </div>
+      <div>
+        <Link to={`/${username}/password`}>
+          <p>Reset Password</p>
+        </Link>
       </div>
 
       <button className="btn" type="submit" onClick={handleSubmit}>
