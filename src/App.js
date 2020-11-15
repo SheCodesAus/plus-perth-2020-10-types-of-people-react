@@ -15,8 +15,8 @@ import DeleteUserPage from "./pages/DeleteUserPage";
 import EditEventPage from "./pages/EditEventPage";
 import DeleteEventPage from "./pages/DeleteEventPage";
 import FilterEventsPage from "./pages/FilterEventPage";
+import PasswordPage from "./pages/PasswordPage";
 import MentorAttendedPage from "./pages/MentorAttendedPage";
-
 
 function App() {
     return (
@@ -56,6 +56,9 @@ function App() {
                 </Route>
                 <Route path="/login">
                     <LoginPage />
+                </Route>
+                <Route path="/:username/password">
+                    <PasswordPage />
                 </Route>
                 <Route path="/create-event">
                     <PostEventPage />
