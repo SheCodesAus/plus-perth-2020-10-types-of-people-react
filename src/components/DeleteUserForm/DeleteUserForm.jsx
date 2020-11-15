@@ -1,6 +1,5 @@
 import React from "react";
 import { useHistory, useParams } from "react-router-dom";
-import "./MentorProfileCard.css";
 
 function DeleteUserFrom(props) {
   const history = useHistory();

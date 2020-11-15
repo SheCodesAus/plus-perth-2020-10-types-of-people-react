@@ -3,11 +3,9 @@ import { useLocation } from "react-router-dom";
 import SignupForm from "../components/SignupForm/SignupForm";
 
 const SignupPage = () => {
-  // function SignupPage() {
   const [LoggedIn, setLoggedIn] = useState(false);
   const location = useLocation();
-  let username = localStorage.username;
-  username = window.localStorage.getItem("username");
+  let username = window.localStorage.getItem("username");
 
   useEffect(() => {
     const token = window.localStorage.getItem("token");

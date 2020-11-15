@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 
 const SignupForm = () => {
-  // function SignupForm() {
-
   const [credentials, setCredentials] = useState({
     username: "",
     email: "",
@@ -14,16 +12,16 @@ const SignupForm = () => {
   const history = useHistory();
 
   const isChecked = (event) => {
-    event.target.checked? 
-    setCredentials((prevCredentials) => ({
-      ...prevCredentials,
-      is_org: true,
-    })): 
-    setCredentials((prevCredentials) => ({
-      ...prevCredentials,
-      is_org: false,
-    }))
-  }
+    event.target.checked
+      ? setCredentials((prevCredentials) => ({
+          ...prevCredentials,
+          is_org: true,
+        }))
+      : setCredentials((prevCredentials) => ({
+          ...prevCredentials,
+          is_org: false,
+        }));
+  };
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -42,23 +40,22 @@ const SignupForm = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(credentials),
-      },
+      }
     );
     return response;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-      postData().then((response) => {
-        console.log(response)
-        if (response.status === 201) {
-          window.localStorage.setItem("username", credentials.username);
-          history.push("/login");
-        } else {
-          alert("this username has already exists")
-        }
-      });
-    // }
+    postData().then((response) => {
+      console.log(response);
+      if (response.status === 201) {
+        // window.localStorage.setItem("token", token);
+        history.push("/login");
+      } else {
+        alert("this username has already exists");
+      }
+    });
   };
 
   return (
@@ -96,7 +93,13 @@ const SignupForm = () => {
       </div> */}
       <div className="form-item">
         <label htmlFor="is_org">Organisation?</label>
-        <input type="checkbox" id="is_org" onChange={(event)=>{isChecked(event)}} />
+        <input
+          type="checkbox"
+          id="is_org"
+          onChange={(event) => {
+            isChecked(event);
+          }}
+        />
       </div>
       <button className="btn" type="submit" onClick={handleSubmit}>
         Sign up

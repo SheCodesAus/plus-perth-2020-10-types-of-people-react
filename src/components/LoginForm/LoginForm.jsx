@@ -27,19 +27,23 @@ const LoginForm = () => {
         body: JSON.stringify(credentials),
       }
     );
+    if (!response.ok) throw new Error("Password error");
     return response.json();
   };
   const handleSubmit = (e) => {
     e.preventDefault();
     if (credentials.username && credentials.password) {
-      postData().then((response) => {
-        console.log("response:", response);
-        window.localStorage.setItem("token", response.token);
-        window.localStorage.setItem("username", credentials.username);
-        console.log("username:", credentials.username);
-        console.log("token:", response.token);
-        history.push("/");
-      });
+      postData()
+        .then((response) => {
+          window.localStorage.setItem("token", response.token);
+          window.localStorage.setItem("username", credentials.username);
+          console.log("username:", credentials.username);
+          console.log("token:", response.token);
+          history.push("/");
+        })
+        .catch(() => {
+          alert("password error");
+        });
     }
   };
 
