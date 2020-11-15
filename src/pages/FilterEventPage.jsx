@@ -3,108 +3,284 @@ import { Link, useParams } from "react-router-dom";
 import EventCard from "../components/EventCard/EventCard";
 
 const FilterEventsPage = () => {
-  const [eventList, setEventList] = useState([]);
-  const [locationEventList, setLocationEventList] = useState([]);
-  const [popularEventList, setPopularEventList] = useState([]);
-  const [locationKms, setLocationKms] = useState();
-  const [filter, setFilter] = useState();
+    // for fetching data
+    const [eventList, setEventList] = useState([]);
+    const [searchTerm, setSearchTerm] = useState();
 
-  //backend urls
-  //   events/categories/<str:category>/events/
-  //   events/most-popular/
-  //events/location/<int:kms>/
+    // for checking if mentor (location available)
+    const [loggedIn, setLoggedIn] = useState(false);
+    const [hasLocation, setHasLocation] = useState(false);
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}events/`)
-      .then((results) => {
-        return results.json();
-      })
-      .then((data) => {
-        setEventList(data);
-      });
-  }, []);
+    // for styling
+    const [filterDescription, setFilterDescription] = useState(
+        <p>Showing all events</p>
+    );
+    const [showCategories, setShowCategories] = useState(false);
+    const [showLocations, setShowLocations] = useState(false);
 
-  //   useEffect(() => {
-  //     fetch(`${process.env.REACT_APP_API_URL}events/location/${locationKms}`)
-  //       .then((results) => {
-  //         return results.json();
-  //       })
-  //       .then((data) => {
-  //         setLocationEventList(data);
-  //       });
-  //   }, []);
+    // Fetching all events on load
+    useEffect(() => {
+        const token = window.localStorage.getItem("token");
+        const username = window.localStorage.getItem("username");
+        token != null ? setLoggedIn(true) : setLoggedIn(false);
+        fetch(`${process.env.REACT_APP_API_URL}users/${username}/`)
+            .then((results) => {
+                return results.json();
+            })
+            .then((data) => {
+                console.log(data);
+                setHasLocation(!data.is_org);
+            });
+        fetch(`${process.env.REACT_APP_API_URL}events/`)
+            .then((results) => {
+                return results.json();
+            })
+            .then((data) => {
+                setEventList(data);
+            });
+    }, []);
 
-  //   useEffect(() => {
-  //     fetch(`${process.env.REACT_APP_API_URL}events/most-popular/`)
-  //       .then((results) => {
-  //         return results.json();
-  //       })
-  //       .then((data) => {
-  //         setPopularEventList(data);
-  //       });
-  //   }, []);
+    // Function to set the search term
+    const handleSearchTerm = (e) => {
+        setSearchTerm(e.target.value);
+    };
 
-  const changeFilter = (event) => {
-    if (event.target.name === "All") {
-      setFilter();
-    } else {
-      setFilter(event.target.name);
-    }
-  };
+    // Function to fetch from location endpoint (need token auth)
+    const handleLocationFetch = async (url) => {
+        let token = window.localStorage.getItem("token");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`, {
+            method: "get",
+            headers: {
+                Authorization: `Token ${token}`,
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        })
+            .then((results) => {
+                return results.json();
+            })
+            .then((data) => {
+                console.log(data);
+                setEventList(data);
+                return data;
+            });
+        return response;
+    };
 
-  return (
-    <div id="home-page" className="container">
-      <section className="event-list-container">
-        <div>
-          <div className="filter-options">
-            <button type="button" id="HTML" name="HTML" onClick={changeFilter}>
-              HTML
-            </button>
-            <button type="button" id="CSS" name="CSS" onClick={changeFilter}>
-              CSS
-            </button>
-            <button
-              type="button"
-              id="Python"
-              name="Python"
-              onClick={changeFilter}
-            >
-              Python
-            </button>
-            <button
-              type="button"
-              id="React"
-              name="React"
-              onClick={changeFilter}
-            >
-              React
-            </button>
-            <button
-              type="button"
-              id="JavaScript"
-              name="JavaScript"
-              onClick={changeFilter}
-            >
-              JavaScript
-            </button>
-            <button type="button" id="all" name="All" onClick={changeFilter}>
-              All
-            </button>
-          </div>
-          <p>See the trending events below.</p>
-          <br></br>
-          <div className="event-grid">
-            {eventList.reduce((total, eventData, key) => {
-              if (filter != null && !eventData.categories.includes(filter))
-                return total;
-              total.push(<EventCard key={key} eventData={eventData} />);
-              return total;
-            }, [])}
-          </div>
+    // Function to fetch from endpoint (used by chooseFilter)
+    const handleFetch = async (url) => {
+        let token = window.localStorage.getItem("token");
+        const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`)
+            .then((results) => {
+                return results.json();
+            })
+            .then((data) => {
+                console.log(data);
+                setEventList(data);
+                return data;
+            });
+        return response;
+    };
+
+    // Determine filter on click
+    const chooseFilter = (e) => {
+        const filter = e.target.name;
+        if (
+            filter === "HTML" ||
+            filter === "CSS" ||
+            filter === "JavaScript" ||
+            filter === "React" ||
+            filter === "Python"
+        ) {
+            handleFetch(`events/categories/${e.target.name}/events/`);
+            setShowCategories(false);
+            setFilterDescription(<p>Showing all {e.target.name} events</p>);
+        } else if (filter === "100" || filter === "50" || filter === "25") {
+            handleLocationFetch(`events/location/${e.target.name}/`);
+            setShowLocations(false);
+            setFilterDescription(
+                <p>
+                    Showing events within {e.target.name} kms of your location
+                </p>
+            );
+        } else if (filter === "most-popular") {
+            handleFetch(`events/most-popular/`);
+            setFilterDescription(<p>Showing most popular events</p>);
+        } else if (filter === "all") {
+            handleFetch(`events/`);
+            setFilterDescription(<p>Showing all events</p>);
+        } else if (filter === "search") {
+            const keyword = searchTerm.trim();
+            handleFetch(`events/search/?query=${keyword}`);
+            setFilterDescription(
+                <p>Showing all events with keyword "{keyword}"</p>
+            );
+        }
+    };
+
+    return (
+        <div id="filter-events-page" className="container">
+            <section className="event-list-container">
+                <div>
+                    <div className="filter-options">
+                        <div className="search-bar">
+                            <input
+                                type="text"
+                                id="search"
+                                name="search"
+                                onChange={handleSearchTerm}
+                                onKeyPress={(e) => {
+                                    if (e.key === "Enter") {
+                                        chooseFilter(e);
+                                    }
+                                }}
+                            />
+                            <button name="search" onClick={chooseFilter}>
+                                <i className="fas fa-search"></i>
+                            </button>
+                        </div>
+                        <div className="filters">
+                            <button
+                                onClick={() => {
+                                    setShowCategories(!showCategories);
+                                }}
+                            >
+                                Search by Category{" "}
+                                <i className="fas fa-chevron-down"></i>
+                            </button>
+                            <div
+                                className={
+                                    showCategories
+                                        ? `show-buttons`
+                                        : `hide-buttons`
+                                }
+                            >
+                                <button
+                                    type="button"
+                                    id="HTML"
+                                    name="HTML"
+                                    onClick={chooseFilter}
+                                >
+                                    HTML
+                                </button>
+                                <button
+                                    type="button"
+                                    id="CSS"
+                                    name="CSS"
+                                    onClick={chooseFilter}
+                                >
+                                    CSS
+                                </button>
+                                <button
+                                    type="button"
+                                    id="Python"
+                                    name="Python"
+                                    onClick={chooseFilter}
+                                >
+                                    Python
+                                </button>
+                                <button
+                                    type="button"
+                                    id="React"
+                                    name="React"
+                                    onClick={chooseFilter}
+                                >
+                                    React
+                                </button>
+                                <button
+                                    type="button"
+                                    id="JavaScript"
+                                    name="JavaScript"
+                                    onClick={chooseFilter}
+                                >
+                                    JavaScript
+                                </button>
+                            </div>
+                        </div>
+                        {loggedIn && hasLocation ? (
+                            <div className="filters">
+                                <button
+                                    onClick={() => {
+                                        setShowLocations(!showLocations);
+                                    }}
+                                >
+                                    Set km radius{" "}
+                                    <i className="fas fa-chevron-down"></i>
+                                </button>
+                                <div
+                                    className={
+                                        showLocations
+                                            ? `show-buttons`
+                                            : `hide-buttons`
+                                    }
+                                >
+                                    <button
+                                        type="button"
+                                        id="location-filter"
+                                        name="100"
+                                        onClick={chooseFilter}
+                                    >
+                                        &lt;100km
+                                    </button>
+                                    <button
+                                        type="button"
+                                        id="location-filter"
+                                        name="50"
+                                        onClick={chooseFilter}
+                                    >
+                                        &lt;50km
+                                    </button>
+                                    <button
+                                        type="button"
+                                        id="location-filter"
+                                        name="25"
+                                        onClick={chooseFilter}
+                                    >
+                                        &lt;25km
+                                    </button>
+                                </div>
+                            </div>
+                        ) : null}
+                        <div className="filters">
+                            <button
+                                type="button"
+                                id="location-filter"
+                                name="most-popular"
+                                onClick={chooseFilter}
+                            >
+                                Most Popular
+                            </button>
+                        </div>
+                        <div className="filters">
+                            <button
+                                type="button"
+                                id="all"
+                                name="all"
+                                onClick={chooseFilter}
+                            >
+                                See all events
+                            </button>
+                        </div>
+                    </div>
+                    <div className="info-panel">{filterDescription}</div>
+                    <div className="event-grid">
+                        {eventList.length > 0 ? (
+                            eventList.map((eventData) => {
+                                return (
+                                    <EventCard
+                                        key={Math.random()}
+                                        eventData={eventData}
+                                    />
+                                );
+                            })
+                        ) : (
+                            <p>No events found</p>
+                        )}
+                    </div>
+                </div>
+            </section>
         </div>
-      </section>
-    </div>
-  );
+    );
 };
 
 export default FilterEventsPage;

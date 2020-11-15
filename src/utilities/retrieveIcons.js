@@ -10,13 +10,13 @@ const retrieveIcons = (skills) => {
             let icon = <i className="fab fa-python fa-2x"></i>
             skillIcons.push(icon)
         } else if (skill === "HTML") {
-            let icon = <i className="fas fa-code fa-2x"></i>
+            let icon = <i className="fab fa-html5 fa-2x"></i>
             skillIcons.push(icon)
         } else if (skill === "CSS") {
-            let icon = <i className="fas fa-code fa-2x"></i>
+            let icon = <i className="fab fa-css3-alt fa-2x"></i>
             skillIcons.push(icon)
         } else if (skill === "React") {
-            let icon = <i className="fas fa-code fa-2x"></i>
+            let icon = <i className="fab fa-react fa-2x"></i>
             skillIcons.push(icon)
         } else {
             let icon = <i className="far fa-file-code fa-2x"></i>
