@@ -4,8 +4,6 @@ import "./EventCard.css";
 import retrieveIcons from "../../utilities/retrieveIcons.js";
 
 const EventCard = (event) => {
-  console.log(event.eventData.categories);
-
   return (
     <Link to={`/events/${event.eventData.id}`}>
       <div id="event-card">
