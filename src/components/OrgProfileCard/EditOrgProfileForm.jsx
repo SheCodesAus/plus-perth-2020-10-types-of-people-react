@@ -8,27 +8,17 @@ function EditProfileFrom(props) {
     const { orgDataProfile, userData } = props;
     let username = window.localStorage.getItem("username");
 
+    const [credentials, setCredentials] = useState({
+        username: "",
+        email: "",
+    });
 
-  const [credentials, setCredentials] = useState({
-    username: "",
-    email: "",
-  });
-
-  const [publicProfile, setPublicProfile] = useState({
-    company_name: "",
-    org_bio: "",
-    contact_name: "",
-    org_image: "",
-  });
-
-  const [publicProfile, setPublicProfile] = useState({
+    const [publicProfile, setPublicProfile] = useState({
         company_name: "",
         org_bio: "",
         contact_name: "",
         org_image: "",
-
     });
-  }, [userData, orgDataProfile]);
 
     useEffect(() => {
         setCredentials({
@@ -47,18 +37,17 @@ function EditProfileFrom(props) {
         });
     }, [userData, orgDataProfile]);
 
-
-  const editData = async () => {
-    let token = window.localStorage.getItem("token");
-
-    const fetch1 = fetch(`${process.env.REACT_APP_API_URL}users/${username}/`, {
-      method: "put",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Token ${token}`,
-      },
-      body: JSON.stringify(credentials),
-    });
+    const handleChange = (e) => {
+        const { id, value } = e.target;
+        setPublicProfile((prevCredentials) => ({
+            ...prevCredentials,
+            [id]: value,
+        }));
+        setCredentials((prevCredentials) => ({
+            ...prevCredentials,
+            [id]: value,
+        }));
+    };
 
     const editData = async () => {
         let token = window.localStorage.getItem("token");
@@ -170,7 +159,6 @@ function EditProfileFrom(props) {
             </button>
         </form>
     );
-
 }
 
 export default EditProfileFrom;

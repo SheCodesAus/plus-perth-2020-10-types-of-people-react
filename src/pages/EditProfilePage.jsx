@@ -13,11 +13,10 @@ function EditProfilePage() {
     const location = useLocation();
     // let username_ST = window.localStorage.getItem("username");
 
-
-  useEffect(() => {
-    const token = window.localStorage.getItem("token");
-    token != null ? setLoggedIn(true) : setLoggedIn(false);
-  }, [location]);
+    useEffect(() => {
+        const token = window.localStorage.getItem("token");
+        token != null ? setLoggedIn(true) : setLoggedIn(false);
+    }, [location]);
 
     const fetchUser = async () => {
         const response = await fetch(
@@ -79,13 +78,6 @@ function EditProfilePage() {
             <Link className="margin-bottom" to={`/profile/${username}`}>
                 Back to profile
             </Link>
-            {/* {isBusy ? (
-
-        <p>loading</p>
-      ) : // ) : LoggedIn && username_ST == username ? (
-      isBusy2 ? (
-        <p>Loading profile data</p>
-      ) : // ) : LoggedIn && use */}
             {LoggedIn ? (
                 isBusy ? (
                     <p>loading</p>
@@ -108,19 +100,13 @@ function EditProfilePage() {
                         )}
                     </>
                 )
-
             ) : (
-              <></>
+                <>
+                    <p>Login to create a profile </p>
+                </>
             )}
-          </>
-        )
-      ) : (
-        <>
-          <p>Login to create a profile </p>
-        </>
-      )}
-    </div>
-  );
+        </div>
+    );
 }
 
 export default EditProfilePage;
