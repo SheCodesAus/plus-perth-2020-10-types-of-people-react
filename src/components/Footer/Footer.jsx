@@ -1,15 +1,32 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
 import "./Footer.css";
 let username = window.localStorage.getItem("username");
 
 const Footer = () => {
+  const [LoggedIn, setLoggedIn] = useState(false);
+  const location = useLocation();
+  let username = localStorage.username;
+  username = window.localStorage.getItem("username");
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const token = window.localStorage.getItem("token");
+    token != null ? setLoggedIn(true) : setLoggedIn(false);
+  }, [location]);
+
   return (
     <div id="footer">
       <div id="footer-top">
-        <Link id="big-button" to="/signup">
-          Get started today!
-        </Link>
+        {!LoggedIn ? (
+          <>
+            <Link id="big-button" to="/signup">
+              Get started today!
+            </Link>
+          </>
+        ) : (
+          <></>
+        )}
       </div>
       <div id="footer-main">
         <div id="footer-main-top">
