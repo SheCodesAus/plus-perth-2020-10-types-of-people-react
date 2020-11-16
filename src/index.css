@@ -84,6 +84,22 @@ i {
     color: var(--white-color);
 }
 
+.success-message {
+    color: var(--primary-color);
+    display: inline-block;
+    width: fit-content;
+    align-self: center;
+    font-size: 1.3rem;
+}
+
+.alert {
+    color: red;
+    display: inline-block;
+    width: fit-content;
+    align-self: center;
+    font-size: 1.3rem;
+}
+
 /* MARGIN */
 
 .margin-bottom {
@@ -99,6 +115,21 @@ i {
     cursor: pointer;
     background-color: inherit;
     transition: background-color 0.4s, color 0.4s;
+    font-size: 1rem;
+}
+
+.btn-danger {
+    color: var(--white-color);
+    background-color: rgb(228, 3, 3);
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: opacity 0.4s, color 0.4s;
+}
+
+.btn-danger:hover {
+    opacity: 0.8;
 }
 
 .btn:hover {
@@ -106,7 +137,8 @@ i {
     color: var(--white-color);
 }
 
-.btn:focus {
+.btn:focus,
+.btn-danger:focus {
     outline: none;
 }
 
@@ -154,7 +186,8 @@ i {
     outline: 1px solid var(--primary-color);
 }
 
-.form button {
+.form button,
+.form a button {
     width: fit-content;
     align-self: center;
     font-size: 1.3rem;
@@ -168,8 +201,19 @@ i {
         font-size: 3rem;
     }
 
-    .btn {
+    .btn,
+    .btn-danger {
         padding: 20px;
+    }
+
+    .success-message {
+        align-self: flex-end;
+        font-size: 1.1rem;
+    }
+
+    .alert {
+        align-self: flex-end;
+        font-size: 1.1rem;
     }
 
     .form {
@@ -203,7 +247,9 @@ i {
         height: 100px;
     }
 
-    .form button {
+    .form button,
+    .form a button,
+    .form a {
         font-size: 1rem;
         align-self: flex-end;
     }

@@ -20,6 +20,7 @@ const FilterEventsPage = () => {
 
     // Fetching all events on load
     useEffect(() => {
+        window.scrollTo(0, 0);
         const token = window.localStorage.getItem("token");
         const username = window.localStorage.getItem("username");
         token != null ? setLoggedIn(true) : setLoggedIn(false);
