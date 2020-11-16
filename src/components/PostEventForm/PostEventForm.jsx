@@ -9,6 +9,8 @@ import { Typeahead } from "react-bootstrap-typeahead";
 import "./PostEventForm.css";
 
 const PostEventForm = () => {
+    const [errorMessage, setErrorMessage] = useState();
+    const [successMessage, setSuccessMessage] = useState();
     const [locationData, setLocationData] = useState({
         latitude: null,
         longitude: null,
@@ -127,21 +129,47 @@ const PostEventForm = () => {
                 }),
             }
         );
-        console.log("JSON RESPONSE", response.json);
-        return response.json();
+        const data = await response.json();
+        return {
+            ok: response.ok,
+            ...data,
+        };
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Submit pressed");
         console.log(eventData);
-        if (eventData.event_name && eventData.event_description) {
-            // console.log(eventData.event_name);
+        if (
+            eventData.event_name &&
+            eventData.event_description &&
+            eventData.event_image &&
+            locationData.event_location &&
+            eventData.categories &&
+            eventData.event_datetime_start &&
+            eventData.event_datetime_end &&
+            locationData.latitude &&
+            locationData.longitude
+        ) {
             postData().then((response) => {
                 console.log(response);
-                // window.localStorage.setItem("title", eventData.title);
-                // history.push("/");
+                if (response.ok) {
+                    setSuccessMessage("Event created");
+                    setErrorMessage(null);
+                } else {
+                    if (
+                        response.event_description !== undefined &&
+                        response.event_description[0] ===
+                            "Ensure this field has no more than 500 characters."
+                    ) {
+                        setErrorMessage(response.event_description[0]);
+                    } else {
+                        setErrorMessage("Something went wrong");
+                    }
+                }
             });
+        } else {
+            setErrorMessage("Please fill out all fields");
         }
     };
 
@@ -157,6 +185,7 @@ const PostEventForm = () => {
                     type="description"
                     id="event_description"
                     onChange={handleChange}
+                    maxLength="500"
                 />
             </div>
             <div className="form-item">
@@ -214,6 +243,10 @@ const PostEventForm = () => {
                     </div>
                 </Fragment>
             </div>
+            {errorMessage && <p className="alert">{errorMessage}</p>}
+            {successMessage && (
+                <p className="success-message">{successMessage}</p>
+            )}
             <button className="btn" type="submit" onClick={handleSubmit}>
                 Post Event
             </button>
