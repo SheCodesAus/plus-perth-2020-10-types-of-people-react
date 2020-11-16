@@ -4,14 +4,14 @@ import EditOrgProfileForm from "../components/OrgProfileCard/EditOrgProfileForm"
 import EditMentorProfileForm from "../components/MentorProfileCard/EditMentorProfileForm";
 
 function EditProfilePage() {
-    const [userData, setUserData] = useState({});
+    const [userData, setUserData] = useState({ loading: true });
     const [orgDataProfile, setOrgDataProfile] = useState({});
     const [mentorDataProfile, setMentorDataProfile] = useState({});
-    const [isBusy, setBusy] = useState(false);
+    const [isBusy, setBusy] = useState(true);
     const { username } = useParams();
     const [LoggedIn, setLoggedIn] = useState(false);
     const location = useLocation();
-    let username_ST = window.localStorage.getItem("username");
+    // let username_ST = window.localStorage.getItem("username");
 
     useEffect(() => {
         const token = window.localStorage.getItem("token");
@@ -26,6 +26,7 @@ function EditProfilePage() {
             const data = await response.json();
             if (data) {
                 setUserData(data);
+                setBusy(false);
             }
             return;
         }
@@ -34,13 +35,13 @@ function EditProfilePage() {
 
     const fetchOrgProfile = async () => {
         const response = await fetch(
-            `${process.env.REACT_APP_API_URL}users/org/${username_ST}/profile/`
+            `${process.env.REACT_APP_API_URL}users/org/${username}/profile/`
         );
         if (response.ok) {
             const data = await response.json();
             if (data) {
                 setOrgDataProfile(data);
-                setBusy(false);
+                // setBusy(false);
             }
             return;
         }
@@ -49,13 +50,13 @@ function EditProfilePage() {
 
     const fetchMentorProfile = async () => {
         const response = await fetch(
-            `${process.env.REACT_APP_API_URL}users/mentor/${username_ST}/profile/`
+            `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`
         );
         if (response.ok) {
             const data = await response.json();
             if (data) {
                 setMentorDataProfile(data);
-                setBusy(false);
+                // setBusy(false);
             }
             return;
         }
@@ -64,33 +65,47 @@ function EditProfilePage() {
 
     useEffect(() => {
         fetchUser();
-        // fetchMentorProfile();
-        // fetchOrgProfile();
-        userData.is_org ? fetchOrgProfile() : fetchMentorProfile();
     }, []);
+
+    useEffect(() => {
+        if (!userData.loading) {
+            userData.is_org ? fetchOrgProfile() : fetchMentorProfile();
+        }
+    }, [userData]);
 
     return (
         <div className="container">
             <Link className="margin-bottom" to={`/profile/${username}`}>
                 Back to profile
             </Link>
-            {isBusy ? (
-                <p>loading</p>
-            ) : // ) : LoggedIn && username_ST == username ? (
-            LoggedIn ? (
-                <>
-                    {userData.is_org ? (
-                        <EditOrgProfileForm
-                            userData={userData}
-                            orgDataProfile={orgDataProfile}
-                        />
-                    ) : (
-                        <EditMentorProfileForm
-                            userData={userData}
-                            mentorDataProfile={mentorDataProfile}
-                        />
-                    )}
-                </>
+            {/* {isBusy ? (
+        <p>loading</p>
+      ) : // ) : LoggedIn && username_ST == username ? (
+      isBusy2 ? (
+        <p>Loading profile data</p>
+      ) : // ) : LoggedIn && use */}
+            {LoggedIn ? (
+                isBusy ? (
+                    <p>loading</p>
+                ) : (
+                    <>
+                        {!userData.loading ? (
+                            userData.is_org ? (
+                                <EditOrgProfileForm
+                                    userData={userData}
+                                    orgDataProfile={orgDataProfile}
+                                />
+                            ) : (
+                                <EditMentorProfileForm
+                                    userData={userData}
+                                    mentorDataProfile={mentorDataProfile}
+                                />
+                            )
+                        ) : (
+                            <></>
+                        )}
+                    </>
+                )
             ) : (
                 <>
                     <p>Login to create a profile </p>

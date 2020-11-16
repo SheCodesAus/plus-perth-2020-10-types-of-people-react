@@ -5,23 +5,22 @@ import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
 
 const MentorProfileCard = (props) => {
-    const [mentorDataProfile, setMentorDataProfile] = useState({});
-    let user = window.localStorage.getItem("username");
-    const [isBusy, setBusy] = useState(true);
-
+  //props is userData
+  const [mentorDataProfile, setMentorDataProfile] = useState({});
+  let user = window.localStorage.getItem("username");
+  const [isBusy, setBusy] = useState(true);
   const [eventsAttended, setEventsAttended] = useState([]);
 
   const fetchMentorEvents = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}events/${props.props.username}/mentor-attendance/`
+      `${process.env.REACT_APP_API_URL}events/${user}/mentor-attendance/`
     );
     if (response.ok) {
-      // console.log(response);
       const data = await response.json();
       if (data) {
         setEventsAttended(data);
         console.log(data);
-        setBusy(false);
+        // setBusy(false);
       }
       return;
     }
@@ -30,14 +29,12 @@ const MentorProfileCard = (props) => {
 
   const fetchMentor = async () => {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}users/mentor/${props.props.username}/profile/`
+      `${process.env.REACT_APP_API_URL}users/mentor/${user}/profile/`
     );
     if (response.ok) {
-      // console.log(response);
       const data = await response.json();
       if (data) {
         setMentorDataProfile(data);
-        // console.log(data);
         setBusy(false);
       }
       return;
@@ -55,9 +52,8 @@ const MentorProfileCard = (props) => {
     email: props.props.email,
     name: mentorDataProfile.name,
     bio: mentorDataProfile.bio,
-    image:
-      "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
-    // mentorDataProfile.image,
+    mentor_image: mentorDataProfile.mentor_image,
+    // "https://cdn.pixabay.com/photo/2015/03/03/08/55/portrait-657116_960_720.jpg",
     skills: mentorDataProfile.skills,
     location: mentorDataProfile.location,
   };
@@ -78,11 +74,36 @@ const MentorProfileCard = (props) => {
     } else {
       return <p></p>;
     }
-    
-    return (
+  }
+
+  return (
+    <>
+      {isBusy ? (
+        <p>loading</p>
+      ) : (
         <>
-            {isBusy ? (
-                <p>loading</p>
+          <div id="profile-exist">
+            {(mentorDataProfile.name === null ||
+              mentorDataProfile.name === undefined) &&
+            mentorDataProfile.skills.length == 0 &&
+            // (mentor_profile.image === null ||
+            //   mentor_profile.image === undefined) &&
+            (mentor_profile.bio === null ||
+              mentor_profile.bio === undefined) ? (
+              <div>
+                <h2>{mentor_profile.username}</h2>
+                <h2>There is no user profile set up for this user </h2>
+                {user === mentor_profile.username ? (
+                  <>
+                    <p>Tell us about yourself and your skills</p>
+                    <IsOwnerCanEdit />
+                    <br></br>
+                    <p>Email: {mentor_profile.email}</p>
+                  </>
+                ) : (
+                  <p></p>
+                )}
+              </div>
             ) : (
               <>
                 <div id="m-profile-sections-1-2">
@@ -90,7 +111,7 @@ const MentorProfileCard = (props) => {
                     <div id="m-profile-left">
                       <img
                         id="m-profile-image"
-                        src={mentor_profile.image}
+                        src={mentor_profile.mentor_image}
                         alt={mentor_profile.username}
                       />
                     </div>
@@ -99,7 +120,6 @@ const MentorProfileCard = (props) => {
                       <IsOwnerCanEdit />
                       <h2>{mentor_profile.username}</h2>
                       <p>Email: {mentor_profile.email}</p>
-                      {/* <div id="m-profile-skills-container">{skillIcons}</div> */}
                       {retrieveIcons(mentor_profile.skills).map((icon) => (
                         <>{icon}</>
                       ))}
@@ -120,9 +140,13 @@ const MentorProfileCard = (props) => {
                     })}
                   </div>
                 </div>
+              </>
             )}
+          </div>
         </>
-    );
+      )}
+    </>
+  );
 };
 
 export default MentorProfileCard;

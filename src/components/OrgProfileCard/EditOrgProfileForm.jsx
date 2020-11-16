@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 // import Loader from "react-loader-spinner";
 
 function EditProfileFrom(props) {
+    const [errorMessage, setErrorMessage] = useState();
     const history = useHistory();
-    const { userData, userDataProfile } = props;
-    let username = localStorage.username;
+    const { orgDataProfile, userData } = props;
+    let username = window.localStorage.getItem("username");
 
     const [credentials, setCredentials] = useState({
         username: "",
@@ -16,6 +17,7 @@ function EditProfileFrom(props) {
         company_name: "",
         org_bio: "",
         contact_name: "",
+        org_image: "",
     });
 
     useEffect(() => {
@@ -25,14 +27,15 @@ function EditProfileFrom(props) {
         });
         setPublicProfile({
             company_name:
-                //undefined or null
-                userDataProfile != null ? userDataProfile.company_name : null,
+                orgDataProfile === null || orgDataProfile === undefined
+                    ? " "
+                    : orgDataProfile.company_name,
             contact_name:
-                userDataProfile != null ? userDataProfile.contact_name : null,
-            org_bio: userDataProfile != null ? userDataProfile.org_bio : null,
+                orgDataProfile === null ? " " : orgDataProfile.contact_name,
+            org_bio: orgDataProfile === null ? " " : orgDataProfile.org_bio,
+            org_image: orgDataProfile === null ? " " : orgDataProfile.org_image,
         });
-    }, [userData, userDataProfile]);
-    // console.log("profile", public_profile);
+    }, [userData, orgDataProfile]);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -48,9 +51,8 @@ function EditProfileFrom(props) {
 
     const editData = async () => {
         let token = window.localStorage.getItem("token");
-        let username = localStorage.username;
 
-        const response1 = await fetch(
+        const fetch1 = fetch(
             `${process.env.REACT_APP_API_URL}users/${username}/`,
             {
                 method: "put",
@@ -61,7 +63,13 @@ function EditProfileFrom(props) {
                 body: JSON.stringify(credentials),
             }
         );
-        const response = await fetch(
+
+        const cleanData = Object.fromEntries(
+            // strip out things that are null
+            Object.entries(publicProfile).filter(([k, v]) => v != null)
+        );
+
+        const fetch2 = fetch(
             `${process.env.REACT_APP_API_URL}users/org/${username}/profile/`,
             {
                 method: "put",
@@ -69,36 +77,31 @@ function EditProfileFrom(props) {
                     "Content-Type": "application/json",
                     Authorization: `Token ${token}`,
                 },
-                body: JSON.stringify(publicProfile),
+                body: JSON.stringify(cleanData),
             }
         );
-        return response.json();
+        const responses = await Promise.all([fetch1, fetch2]);
+        return responses;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submit pressed");
         if (credentials.username) {
-            editData().then((response) => {
-                // setBusy(false);
-                console.log(response);
-                // window.localStorage.setItem("username", credentials.username);
-                history.push(`/profile/${username}`);
+            editData().then((responses) => {
+                console.log(responses);
+                if (responses[0].ok && responses[1].ok) {
+                    history.push(`/profile/${username}`);
+                } else {
+                    setErrorMessage("Invalid email address");
+                }
             });
+        } else {
+            setErrorMessage("Please fill out the required fields");
         }
     };
 
     return (
         <form className="form">
-            <div className="form-item">
-                <label htmlFor="username">Username:</label>
-                <input
-                    type="text"
-                    id="username"
-                    value={credentials.username}
-                    onChange={handleChange}
-                />
-            </div>
             <div className="form-item">
                 <label htmlFor="email">Email:</label>
                 <input
@@ -127,23 +130,30 @@ function EditProfileFrom(props) {
                 />
             </div>
             <div className="form-item">
-                <label htmlFor="org_bio">Bio:</label>
-                <input
+                <label htmlFor="org_bio">About:</label>
+                <textarea
                     type="text"
                     id="org_bio"
                     defaultValue={publicProfile.org_bio}
                     onChange={handleChange}
+                    maxLength="500"
                 />
             </div>
-            {/* <div>
-        <label htmlFor="password">Password:</label>
-        <input
-          type="password"
-          id="password"
-          value={credentials.password}
-          onChange={handleChange}
-        />
-      </div> */}
+            <div className="form-item">
+                <label htmlFor="org_image">Image:</label>
+                <input
+                    type="url"
+                    id="org_image"
+                    defaultValue={publicProfile.org_image}
+                    onChange={handleChange}
+                />
+            </div>
+            <div>
+                <Link to={`/${username}/password`}>
+                    <p>Reset Password</p>
+                </Link>
+            </div>
+            {errorMessage && <p className="alert">{errorMessage}</p>}
             <button className="btn" type="submit" onClick={handleSubmit}>
                 Update Account
             </button>

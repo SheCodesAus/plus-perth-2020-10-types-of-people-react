@@ -1,4 +1,4 @@
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import React, { Fragment, useState, useEffect } from "react";
 import { Form } from "react-bootstrap";
 import { Typeahead } from "react-bootstrap-typeahead";
@@ -9,32 +9,31 @@ import usePlacesAutocomplete, {
 import "./MentorProfileCard.css";
 
 function EditProfileFrom(props) {
+    const [errorMessage, setErrorMessage] = useState();
     const history = useHistory();
     const { userData, mentorDataProfile } = props;
-    let username = localStorage.username;
+    let username = window.localStorage.getItem("username");
     const [categoryData, setCategoryData] = useState([]);
+    const [locationClicked, setLocationClicked] = useState(false);
 
-    // set data...[account]
     const [credentials, setCredentials] = useState({
         username: "",
         email: "",
     });
 
-    // ...[profile]
     const [publicProfile, setPublicProfile] = useState({
         name: "",
         bio: "",
         skills: [],
+        mentor_image: "",
     });
 
-    // ...[profile/location]
     const [locationData, setLocationData] = useState({
         latitude: null,
         longitude: null,
         location: "",
     });
 
-    // on load, set categories to choose from
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}events/categories/`)
             .then((results) => {
@@ -47,7 +46,6 @@ function EditProfileFrom(props) {
 
     const category_option = categoryData.map((category) => category.category);
 
-    // on load set current values in form
     useEffect(() => {
         setCredentials({
             username: userData.username,
@@ -58,14 +56,18 @@ function EditProfileFrom(props) {
             name:
                 mentorDataProfile === undefined ? " " : mentorDataProfile.name,
             skills: mentorDataProfile === null ? " " : mentorDataProfile.skills,
+            mentor_image:
+                mentorDataProfile === null
+                    ? " "
+                    : mentorDataProfile.mentor_image,
         });
         setLocationData({
             location:
-                mentorDataProfile != null ? mentorDataProfile.location : null,
+                mentorDataProfile === null ? " " : mentorDataProfile.location,
         });
+        setValue(mentorDataProfile === null ? " " : mentorDataProfile.location);
     }, [userData, mentorDataProfile]);
 
-    // Unpacking the data from usePlacesAutocomplete library
     const {
         ready,
         value,
@@ -76,17 +78,15 @@ function EditProfileFrom(props) {
         debounce: 300,
     });
 
-    // Handling input for location
     const handleInput = (e) => {
+        setLocationClicked(true);
         setValue(e.target.value);
     };
 
-    // Setting state as the user selects a suggestion
     const handleSelect = ({ description }) => () => {
         setValue(description, false);
         clearSuggestions();
 
-        // Get latitude and longitude via utility functions
         getGeocode({ address: description })
             .then((results) => getLatLng(results[0]))
             .then(({ lat, lng }) => {
@@ -101,16 +101,13 @@ function EditProfileFrom(props) {
             });
     };
 
-    // Rendering the suggestions from the api as input changes
     const renderSuggestions = () =>
         data.map((suggestion) => {
-            // Unpack suggestion
             const {
                 id,
                 structured_formatting: { main_text, secondary_text },
             } = suggestion;
 
-            // Render list of suggestions
             return (
                 <li key={id} onClick={handleSelect(suggestion)}>
                     <strong>{main_text}</strong> <small>{secondary_text}</small>
@@ -124,21 +121,23 @@ function EditProfileFrom(props) {
 
     const handleChange = (e) => {
         const { id, value } = e.target;
-        setCredentials((prevCredentials) => ({
-            ...prevCredentials,
-            [id]: value,
-        }));
-        setPublicProfile((prevCredentials) => ({
-            ...prevCredentials,
-            [id]: value,
-        }));
+        if (id === "email") {
+            setCredentials((prevCredentials) => ({
+                ...prevCredentials,
+                [id]: value,
+            }));
+        } else {
+            setPublicProfile((prevCredentials) => ({
+                ...prevCredentials,
+                [id]: value,
+            }));
+        }
     };
 
     const editData = async () => {
         let token = window.localStorage.getItem("token");
-        let username = localStorage.username;
 
-        const response1 = await fetch(
+        const fetch1 = fetch(
             `${process.env.REACT_APP_API_URL}users/${username}/`,
             {
                 method: "put",
@@ -150,33 +149,52 @@ function EditProfileFrom(props) {
                 body: JSON.stringify(credentials),
             }
         );
-        const response = await fetch(
+
+        const data = {
+            ...publicProfile,
+            location: locationData.location,
+            latitude: locationData.latitude,
+            longitude: locationData.longitude,
+        };
+        const cleanData = Object.fromEntries(
+            // strip out things that are null
+            Object.entries(data).filter(([k, v]) => v != null)
+        );
+
+        const fetch2 = fetch(
             `${process.env.REACT_APP_API_URL}users/mentor/${username}/profile/`,
             {
                 method: "put",
                 headers: {
                     "Content-Type": "application/json",
+                    Accept: "application/json",
                     Authorization: `Token ${token}`,
                 },
-                body: JSON.stringify({
-                    ...publicProfile,
-                    location: locationData.location,
-                    latitude: locationData.latitude,
-                    longitude: locationData.longitude,
-                }),
+                body: JSON.stringify(cleanData),
             }
         );
-        return response.json();
+
+        const responses = await Promise.all([fetch1, fetch2]);
+        return responses;
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Submit pressed");
+        // console.log("Submit pressed");
         if (credentials.username) {
-            editData().then((response) => {
-                console.log(response);
-                history.push(`/profile/${username}`);
-            });
+            editData()
+                .then((responses) => {
+                    if (responses[0].ok && responses[1].ok) {
+                        history.push(`/profile/${username}`);
+                    } else {
+                        setErrorMessage("Invalid details");
+                    }
+                })
+                .catch((error) => {
+                    console.log(error.response.data.message);
+                });
+        } else {
+            setErrorMessage("Please fill out the required fields");
         }
     };
 
@@ -196,16 +214,25 @@ function EditProfileFrom(props) {
                 <input
                     type="text"
                     id="name"
-                    defaultValue={publicProfile.name}
+                    value={publicProfile.name}
                     onChange={handleChange}
                 />
             </div>
             <div className="form-item">
                 <label htmlFor="bio">Bio:</label>
-                <input
+                <textarea
                     type="text"
                     id="bio"
                     defaultValue={publicProfile.bio}
+                    onChange={handleChange}
+                />
+            </div>
+            <div className="form-item">
+                <label htmlFor="mentor_image">Image</label>
+                <input
+                    type="url"
+                    id="mentor_image"
+                    defaultValue={publicProfile.mentor_image}
                     onChange={handleChange}
                 />
             </div>
@@ -215,16 +242,17 @@ function EditProfileFrom(props) {
                     id="location"
                     value={value}
                     onChange={handleInput}
+                    onClick={() => setLocationClicked(true)}
                     disabled={!ready}
                     placeholder="Where would you like to see events?"
                 />
             </div>
-            {status === "OK" && (
-                <div className="form-item">
+            {status === "OK" && locationClicked ? (
+                <div id="location-suggestions" className="form-item">
                     <label></label>
                     <ul className="location-options">{renderSuggestions()}</ul>
                 </div>
-            )}
+            ) : null}
             <div className="form-item">
                 <Fragment>
                     <div className="category-item-container">
@@ -242,7 +270,12 @@ function EditProfileFrom(props) {
                     </div>
                 </Fragment>
             </div>
-
+            <div>
+                <Link to={`/${username}/password`}>
+                    <p>Reset Password</p>
+                </Link>
+            </div>
+            {errorMessage && <p className="alert">{errorMessage}</p>}
             <button className="btn" type="submit" onClick={handleSubmit}>
                 Update Account
             </button>
