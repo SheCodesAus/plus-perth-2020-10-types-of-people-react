@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 import AddToCalendar from "react-add-to-calendar";
 import MentorRegisterForm from "../components/MentorRegisterForm/MentorRegisterForm";
-import retrieveIcon from "../utilities/retrieveIcon.js";
+
+import MentorAttendedPage from "./MentorAttendedPage";
+import { Button } from "react-bootstrap";
+import retrieveIcons from "../utilities/retrieveIcons.js";
 
 const EventPage = () => {
     const { id } = useParams();
@@ -150,57 +153,66 @@ const EventPage = () => {
         }
     }
 
-    return (
-        <>
-            {isBusy ? (
-                <p>loading</p>
-            ) : (
-                <div id="event-page" className="container">
-                    <IsOwnerCanEdit />
-                    <h1>{eventData.event_name}</h1>
-                    <h3>{eventData.event_datetime_start}</h3>
-                    <h3>Hosted by {eventData.organiser}</h3>
-                    <div id="event-page-image">
-                        <img src={eventData.event_image} alt="event image" />
-                    </div>
-                    {icon}
-                    <div id="status">
-                        <h3>Status: </h3>
-                        <h3>
-                            {event_is_open()}
-                            <Status />
-                        </h3>
-                    </div>
-                    <p>{eventData.event_description}</p>
-                    <br></br>
-                    {generateCalendar(eventData)}
-                    {/* if logged in and not an org */}
-                    {!LoggedIn ? (
-                        <>
-                            <p>
-                                Login to register your interest to be a mentor
-                                at this event
-                            </p>
-                        </>
-                    ) : (
-                        <>
-                            {!event_is_open() ? (
-                                <>
-                                    <h4>Responses are closed for this event</h4>
-                                </>
-                            ) : (
-                                <>
-                                    {/* <MentorRegisterForm id={id} /> */}
-                                    {MentorRegister()}
-                                </>
-                            )}
-                        </>
-                    )}
-                    <ShowRegistrations />
-                </div>
-            )}
-        </>
-    );
+
+  return (
+    <>
+      {isBusy ? (
+        <p>loading</p>
+      ) : (
+        <div id="event-page" className="container">
+          <IsOwnerCanEdit />
+          <h1>{eventData.event_name}</h1>
+          <h3>{Date(eventData.event_datetime_start)}</h3>
+          <h3>Hosted by {eventData.organiser}</h3>
+          <div id="event-page-image">
+            <img src={eventData.event_image} alt="event image" />
+          </div>
+          {retrieveIcons(eventData.categories).map((icon) => (
+            <>{icon}</>
+          ))}
+          <div id="status">
+            <h3>Status: </h3>
+            <h3>
+              {event_is_open()}
+              <Status />
+            </h3>
+          </div>
+          <p>{eventData.event_description}</p>
+          <br></br>
+          {generateCalendar(eventData)}
+          {/* if logged in and not an org */}
+          {!LoggedIn ? (
+            <>
+              <p>
+                Login to register your interest to be a mentor at this event
+              </p>
+            </>
+          ) : (
+            <>
+              {!event_is_open() ? (
+                <>
+                  <h4>Responses are closed for this event</h4>
+                </>
+              ) : (
+                <>
+                  {/* <MentorRegisterForm id={id} /> */}
+                  {MentorRegister()}
+                </>
+              )}
+            </>
+          )}
+          {!event_is_open() && username === eventData.organiser ? (
+            <Link className="navbar-menu-item" to={`/events/${id}/attended`}>
+              Confirm Mentor Attendance
+            </Link>
+          ) : (
+            ""
+          )}
+          <ShowRegistrations />
+        </div>
+      )}
+    </>
+  );
 };
 
 export default EventPage;

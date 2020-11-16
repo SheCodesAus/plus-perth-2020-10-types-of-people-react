@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import EventCard from "../components/EventCard/EventCard";
 import PostEventForm from "../components/PostEventForm/PostEventForm";
 
 const PostEventPage = () => {
-  // const [isOrg, setIsOrg] = useState(false);
   const [userData, setUserData] = useState();
   let user = localStorage.username;
   const [isBusy, setBusy] = useState(true);

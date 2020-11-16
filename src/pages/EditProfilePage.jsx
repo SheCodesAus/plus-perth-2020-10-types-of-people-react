@@ -13,10 +13,11 @@ function EditProfilePage() {
     const location = useLocation();
     // let username_ST = window.localStorage.getItem("username");
 
-    useEffect(() => {
-        const token = window.localStorage.getItem("token");
-        token != null ? setLoggedIn(true) : setLoggedIn(false);
-    }, [location]);
+
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+    token != null ? setLoggedIn(true) : setLoggedIn(false);
+  }, [location]);
 
     const fetchUser = async () => {
         const response = await fetch(
@@ -79,6 +80,7 @@ function EditProfilePage() {
                 Back to profile
             </Link>
             {/* {isBusy ? (
+
         <p>loading</p>
       ) : // ) : LoggedIn && username_ST == username ? (
       isBusy2 ? (
@@ -106,13 +108,19 @@ function EditProfilePage() {
                         )}
                     </>
                 )
+
             ) : (
-                <>
-                    <p>Login to create a profile </p>
-                </>
+              <></>
             )}
-        </div>
-    );
+          </>
+        )
+      ) : (
+        <>
+          <p>Login to create a profile </p>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default EditProfilePage;

@@ -4,7 +4,7 @@ import EventCard from "../EventCard/EventCard";
 import "./OrgProfileCard.css";
 
 const OrgProfileCard = (props) => {
-    const [orgDataProfile, setOrgDataProfile] = useState({});
+  const [orgDataProfile, setOrgDataProfile] = useState({});
     let user = window.localStorage.getItem("username");
     const [isBusy, setBusy] = useState(true);
     const [eventsHosted, setEventsHosted] = useState([]);
@@ -23,6 +23,7 @@ const OrgProfileCard = (props) => {
         }
         const data = await response.json();
     };
+
 
     const fetchOrgEvents = async () => {
         const response = await fetch(
@@ -133,6 +134,7 @@ const OrgProfileCard = (props) => {
                                 </div>
                             </>
                         )}
+
                     </div>
                 </>
             )}
