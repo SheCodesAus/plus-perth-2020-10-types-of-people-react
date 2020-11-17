@@ -16,14 +16,18 @@ const MentorAttendedForm = () => {
       });
   }, []);
 
-  const putEvent = () => {
-    return fetch(`${process.env.REACT_APP_API_URL}events/${id}/attendance/`, {
-      method: "put",
+  const putEvent = async () => {
+    let token = window.localStorage.getItem("token");
+    const putRequest = fetch(`${process.env.REACT_APP_API_URL}events/${id}/attendance/`, {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
+        Authorization: `Token ${token}`,
       },
       body: JSON.stringify(mentorsAtt),
     });
+    return await Promise.all([putRequest]);
   };
   const setAttended = (mentor, attended) => {
     mentorsAtt.responses.forEach((element) => {
@@ -44,7 +48,7 @@ const MentorAttendedForm = () => {
       return res;
     });
   };
-
+  
   return (
     <form className="form">
       <div className="form-item">
