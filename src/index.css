@@ -25,10 +25,15 @@ p,
 small,
 li,
 label,
-button {
+button,
+i {
     font-family: var(--font-family-minor);
     color: var(--dark-color);
     margin: 0;
+}
+
+a:hover i {
+    text-decoration: none;
 }
 
 a {
