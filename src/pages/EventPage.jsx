@@ -31,11 +31,6 @@ const EventPage = () => {
     const data = await response.json();
   };
 
-  useEffect(() => {
-    const token = window.localStorage.getItem("token");
-    token != null ? setLoggedIn(true) : setLoggedIn(false);
-  }, [location]);
-
   const fetchEvent = async () => {
     const response = await fetch(
       `${process.env.REACT_APP_API_URL}events/${id}/`
@@ -50,6 +45,10 @@ const EventPage = () => {
     }
     const data = await response.json();
   };
+  useEffect(() => {
+    const token = window.localStorage.getItem("token");
+    token != null ? setLoggedIn(true) : setLoggedIn(false);
+  }, [location]);
 
   useEffect(() => {
     fetchUser();
@@ -108,10 +107,12 @@ const EventPage = () => {
   function ShowRegistrations() {
     if (username === eventData.organiser) {
       return (
-        <div id="owner-links">
-          {eventData.responses && (
+        <div>
+          <h3>Registrations: </h3>
+          {eventData.responses.length === 0 ? (
+            <p>There are currently no registrations for this event</p>
+          ) : (
             <div>
-              <h3>Registrations: </h3>
               <ul>
                 {eventData.responses.map((responseData, key) => {
                   return (
@@ -130,7 +131,7 @@ const EventPage = () => {
         </div>
       );
     } else {
-      return <p></p>;
+      return "";
     }
   }
 
