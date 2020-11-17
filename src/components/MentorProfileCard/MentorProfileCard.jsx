@@ -117,30 +117,33 @@ const MentorProfileCard = (props) => {
                       />
                     </div>
                     <div id="m-profile-right">
-                      <h1>{mentor_profile.name}</h1>
                       <IsOwnerCanEdit />
+                      <h1>{mentor_profile.name}</h1>
                       <h2>{mentor_profile.username}</h2>
                       <p>Email: {mentor_profile.email}</p>
-                      {retrieveIcons(mentor_profile.skills).map((icon) => (
-                        <>{icon}</>
-                      ))}
+                      <div>
+                        {retrieveIcons(mentor_profile.skills).map((icon) => (
+                          <>{icon}</>
+                        ))}
+                      </div>
                     </div>
                   </div>
                   <div id="m-profile-section-2">
                     <h3>Bio</h3>
-                    <p>{mentor_profile.bio}</p>
                     <p>{mentor_profile.location}</p>
+                    <br></br>
+                    <p>{mentor_profile.bio}</p>
                   </div>
                 </div>
-                <div id="m-profile-section-3">
-                  {/* <h3>Events I've signed up for</h3> */}
+                {/* <div id="m-profile-section-3">
+                  <h3>Events I've signed up for</h3>
                   <h3>Events I've mentored at</h3>
                   <div className="event-grid">
                     {eventsAttended.map((eventData, key) => {
                       return <EventCard key={key} eventData={eventData} />;
                     })}
                   </div>
-                </div>
+                </div> */}
               </>
             )}
           </div>

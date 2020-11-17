@@ -201,7 +201,9 @@ const EventPage = () => {
               Status: <Status />
             </h3>
           </div>
-          <p>{eventData.event_description}</p>
+          <div className="event-page-bio">
+            <p>{eventData.event_description}</p>
+          </div>
           <br></br>
           {generateCalendar(eventData)}
           {/* if logged in and not an org */}
