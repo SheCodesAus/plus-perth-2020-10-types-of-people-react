@@ -1,0 +1,22 @@
+#mentor-register-form {
+    border: 1px solid var(--grey-color);
+    padding: 2rem;
+    /* background-color: var(--primary-color); */
+}
+
+#mentor-register-form div {
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#mentor-register-form div button {
+    width: fit-content;
+}
+
+#mentor-register-form div .success-message,
+#mentor-register-form div .alert {
+    align-self: center;
+}
