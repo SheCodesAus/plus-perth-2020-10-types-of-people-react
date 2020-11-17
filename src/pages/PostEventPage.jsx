@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import PostEventForm from "../components/PostEventForm/PostEventForm";
+import logo from "../Spinner.svg";
 
 const PostEventPage = () => {
   const [userData, setUserData] = useState();
@@ -29,7 +30,7 @@ const PostEventPage = () => {
   return (
     <div className="container">
       {isBusy ? (
-        <p>loading</p>
+        <img id="spinner-img" src={logo} alt="loading..." />
       ) : userData.is_org ? (
         <>
           <h1>Post an Event</h1>

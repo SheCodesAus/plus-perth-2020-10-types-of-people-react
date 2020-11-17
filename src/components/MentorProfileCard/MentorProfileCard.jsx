@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import EventCard from "../../components/EventCard/EventCard";
 import retrieveIcons from "../../utilities/retrieveIcons.js";
 import "./MentorProfileCard.css";
+import logo from "../../Spinner.svg";
 
 const MentorProfileCard = (props) => {
   //props is userData
@@ -79,7 +80,7 @@ const MentorProfileCard = (props) => {
   return (
     <>
       {isBusy ? (
-        <p>loading</p>
+        <img id="spinner-img" src={logo} alt="loading..." />
       ) : (
         <>
           <div id="profile-exist">
