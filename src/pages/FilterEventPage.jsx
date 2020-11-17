@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import EventCard from "../components/EventCard/EventCard";
 
 const FilterEventsPage = () => {
@@ -18,6 +18,12 @@ const FilterEventsPage = () => {
     const [showCategories, setShowCategories] = useState(false);
     const [showLocations, setShowLocations] = useState(false);
 
+    // Handling queries from url params
+    const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+    };
+    let query = useQuery().get("category");
+
     // Fetching all events on load
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -32,13 +38,19 @@ const FilterEventsPage = () => {
                 console.log(data);
                 setHasLocation(!data.is_org);
             });
-        fetch(`${process.env.REACT_APP_API_URL}events/`)
-            .then((results) => {
-                return results.json();
-            })
-            .then((data) => {
-                setEventList(data);
-            });
+        // if category query show relevant events
+        if (query) {
+            handleFetch(`events/categories/${query}/events/`);
+            setFilterDescription(<p>Showing all {query} events</p>);
+        } else {
+            fetch(`${process.env.REACT_APP_API_URL}events/`)
+                .then((results) => {
+                    return results.json();
+                })
+                .then((data) => {
+                    setEventList(data);
+                });
+        }
     }, []);
 
     // Function to set the search term
@@ -68,7 +80,7 @@ const FilterEventsPage = () => {
         return response;
     };
 
-    // Function to fetch from endpoint (used by chooseFilter)
+    // Function to fetch from endpoint
     const handleFetch = async (url) => {
         let token = window.localStorage.getItem("token");
         const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`)
