@@ -18,9 +18,11 @@ const EventCard = (event) => {
             {event.eventData.event_date} | {event.eventData.event_name}
           </h5>
           <small>{event.eventData.organiser}</small>
-          {retrieveIcons(event.eventData.categories).map((icon) => (
-            <>{icon}</>
-          ))}
+          <div>
+            {retrieveIcons(event.eventData.categories).map((icon) => (
+              <>{icon}</>
+            ))}
+          </div>
           {/* {event.eventData.categories} */}
         </div>
       </div>
