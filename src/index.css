@@ -29,6 +29,16 @@ button {
   font-family: var(--font-family-minor);
   color: var(--dark-color);
   margin: 0;
+=======
+
+button,
+i {
+    font-family: var(--font-family-minor);
+    color: var(--dark-color);
+    margin: 0;
+
+a:hover i {
+    text-decoration: none;
 }
 
 a {
@@ -109,13 +119,19 @@ i {
 
 /* BUTTONS */
 
-.btn {
+.btn,
+.btn-cancel {
   border: 1px solid var(--dark-color);
   padding: 15px 20px;
   cursor: pointer;
   background-color: inherit;
   transition: background-color 0.4s, color 0.4s;
   font-size: 1rem;
+
+}
+
+.btn-cancel {
+  margin-left: 80px;
 }
 
 .btn-danger {
@@ -132,13 +148,15 @@ i {
   opacity: 0.8;
 }
 
-.btn:hover {
+.btn:hover,
+.btn-cancel:hover {
   background-color: var(--dark-color);
   color: var(--white-color);
 }
 
 .btn:focus,
-.btn-danger:focus {
+.btn-danger:focus,
+.btn-cancel:focus {
   outline: none;
 }
 
@@ -209,7 +227,8 @@ i {
   }
 
   .btn,
-  .btn-danger {
+  .btn-danger,
+  .btn-cancel {
     padding: 20px;
   }
 
