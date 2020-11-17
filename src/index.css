@@ -1,23 +1,23 @@
 @import url("https://fonts.googleapis.com/css2?family=Didact+Gothic&family=Roboto:wght@500;700;900&display=swap");
 
 :root {
-    --dark-color: #151515;
-    --grey-color: #dbdbdb;
-    --white-color: #f9f9f9;
-    --primary-color: #009c2a;
-    --primary-color-muted: #00882a;
-    /* ROBOTO FONT WEIGHTS: 500, 700, 900 */
-    --font-family-major: "Roboto", sans-serif;
-    --font-family-minor: "Didact Gothic", sans-serif;
+  --dark-color: #151515;
+  --grey-color: #dbdbdb;
+  --white-color: #f9f9f9;
+  --primary-color: #009c2a;
+  --primary-color-muted: #00882a;
+  /* ROBOTO FONT WEIGHTS: 500, 700, 900 */
+  --font-family-major: "Roboto", sans-serif;
+  --font-family-minor: "Didact Gothic", sans-serif;
 }
 
 body,
 html {
-    background-color: var(--white-color);
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    line-height: 1.5;
+  background-color: var(--white-color);
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  line-height: 1.5;
 }
 
 a,
@@ -25,22 +25,27 @@ p,
 small,
 li,
 label,
-button {
+
+button,
+i {
     font-family: var(--font-family-minor);
     color: var(--dark-color);
     margin: 0;
-}
 
-a {
+a:hover i {
     text-decoration: none;
 }
 
+a {
+  text-decoration: none;
+}
+
 a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
 
 li {
-    list-style: none;
+  list-style: none;
 }
 
 h1,
@@ -49,208 +54,216 @@ h3,
 h4,
 h5,
 h6 {
-    font-family: var(--font-family-major);
-    font-weight: 500;
-    color: var(--dark-color);
-    margin: 1rem 0 2rem 0;
+  font-family: var(--font-family-major);
+  font-weight: 500;
+  color: var(--dark-color);
+  margin: 1rem 0 2rem 0;
 }
 
 i {
-    color: var(--dark-color);
+  color: var(--dark-color);
 }
 
 .container {
-    max-width: 900px;
-    margin: auto;
-    padding: 20px;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
 }
 
 .separation-container {
-    height: 91px;
-    width: 100vw;
+  height: 91px;
+  width: 100vw;
 }
 
 .large-heading {
-    font-size: 1.9rem;
+  font-size: 1.9rem;
 }
 
 /* TEXT FORMATTING */
 
 .text-primary {
-    color: var(--primary-color);
+  color: var(--primary-color);
 }
 
 .text-white {
-    color: var(--white-color);
+  color: var(--white-color);
 }
 
 .success-message {
-    color: var(--primary-color);
-    display: inline-block;
-    width: fit-content;
-    align-self: center;
-    font-size: 1.3rem;
+  color: var(--primary-color);
+  display: inline-block;
+  width: fit-content;
+  align-self: center;
+  font-size: 1.3rem;
 }
 
 .alert {
-    color: red;
-    display: inline-block;
-    width: fit-content;
-    align-self: center;
-    font-size: 1.3rem;
+  color: red;
+  display: inline-block;
+  width: fit-content;
+  align-self: center;
+  font-size: 1.3rem;
 }
 
 /* MARGIN */
 
 .margin-bottom {
-    margin-bottom: 1.5rem;
-    display: block;
+  margin-bottom: 1.5rem;
+  display: block;
 }
 
 /* BUTTONS */
 
-.btn {
-    border: 1px solid var(--dark-color);
-    padding: 15px 20px;
-    cursor: pointer;
-    background-color: inherit;
-    transition: background-color 0.4s, color 0.4s;
-    font-size: 1rem;
+.btn,
+.btn-cancel {
+  border: 1px solid var(--dark-color);
+  padding: 15px 20px;
+  cursor: pointer;
+  background-color: inherit;
+  transition: background-color 0.4s, color 0.4s;
+  font-size: 1rem;
+}
+
+.btn-cancel {
+  margin-left: 80px;
 }
 
 .btn-danger {
-    color: var(--white-color);
-    background-color: rgb(228, 3, 3);
-    border: none;
-    padding: 15px 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: opacity 0.4s, color 0.4s;
+  color: var(--white-color);
+  background-color: rgb(228, 3, 3);
+  border: none;
+  padding: 15px 20px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: opacity 0.4s, color 0.4s;
 }
 
 .btn-danger:hover {
-    opacity: 0.8;
+  opacity: 0.8;
 }
 
-.btn:hover {
-    background-color: var(--dark-color);
-    color: var(--white-color);
+.btn:hover,
+.btn-cancel:hover {
+  background-color: var(--dark-color);
+  color: var(--white-color);
 }
 
 .btn:focus,
-.btn-danger:focus {
-    outline: none;
+.btn-danger:focus,
+.btn-cancel:focus {
+  outline: none;
 }
 
 /* FORMS SETTINGS */
 
 .form {
-    display: flex;
-    flex-direction: column;
-    text-align: center;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
 }
 
 .form .form-item {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  align-items: center;
 }
 
 .form .form-item label {
-    width: 100%;
-    margin-bottom: 10px;
-    margin-top: 20px;
-    font-size: 1.3rem;
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 20px;
+  font-size: 1.3rem;
 }
 
 .form .form-item input,
 .form .form-item textarea {
-    width: 95%;
-    border: 1px solid var(--grey-color);
-    font-family: var(--font-family-minor);
-    padding: 0.5rem;
-    font-size: 1.3rem;
+  width: 95%;
+  border: 1px solid var(--grey-color);
+  font-family: var(--font-family-minor);
+  padding: 0.5rem;
+  font-size: 1.3rem;
 }
 
 .form .form-item input {
-    height: 30px;
+  height: 30px;
 }
 
 .form .form-item textarea {
-    height: 100px;
+  height: 100px;
 }
 
 .form .form-item input:focus,
 .form .form-item textarea:focus {
-    outline: 1px solid var(--primary-color);
+  outline: 1px solid var(--primary-color);
 }
 
 .form button,
 .form a button {
-    width: fit-content;
-    align-self: center;
-    font-size: 1.3rem;
-    margin-top: 30px;
+  width: fit-content;
+  align-self: center;
+  font-size: 1.3rem;
+  margin-top: 30px;
 }
 
 /* MEDIA QUERIES FOR LARGER SCREENS */
 
 @media only screen and (min-width: 700px) {
-    .large-heading {
-        font-size: 3rem;
-    }
+  .large-heading {
+    font-size: 3rem;
+  }
 
-    .btn,
-    .btn-danger {
-        padding: 20px;
-    }
+  .btn,
+  .btn-danger,
+  .btn-cancel {
+    padding: 20px;
+  }
 
-    .success-message {
-        align-self: flex-end;
-        font-size: 1.1rem;
-    }
+  .success-message {
+    align-self: flex-end;
+    font-size: 1.1rem;
+  }
 
-    .alert {
-        align-self: flex-end;
-        font-size: 1.1rem;
-    }
+  .alert {
+    align-self: flex-end;
+    font-size: 1.1rem;
+  }
 
-    .form {
-        text-align: left;
-    }
+  .form {
+    text-align: left;
+  }
 
-    .form .form-item {
-        flex-direction: row;
-    }
+  .form .form-item {
+    flex-direction: row;
+  }
 
-    .form .form-item label {
-        width: 28%;
-        font-size: 1rem;
-    }
+  .form .form-item label {
+    width: 28%;
+    font-size: 1rem;
+  }
 
-    .form .form-item input,
-    .form .form-item textarea {
-        width: 70%;
-        font-family: var(--font-family-minor);
-        padding: 0.5rem;
-        letter-spacing: 0.2px;
-        font-size: 0.9rem;
-        color: var(--dark-color);
-    }
+  .form .form-item input,
+  .form .form-item textarea {
+    width: 70%;
+    font-family: var(--font-family-minor);
+    padding: 0.5rem;
+    letter-spacing: 0.2px;
+    font-size: 0.9rem;
+    color: var(--dark-color);
+  }
 
-    .form .form-item input {
-        height: 30px;
-    }
+  .form .form-item input {
+    height: 30px;
+  }
 
-    .form .form-item textarea {
-        height: 100px;
-    }
+  .form .form-item textarea {
+    height: 100px;
+  }
 
-    .form button,
-    .form a button,
-    .form a {
-        font-size: 1rem;
-        align-self: flex-end;
-    }
+  .form button,
+  .form a button,
+  .form a {
+    font-size: 1rem;
+    align-self: flex-end;
+  }
 }

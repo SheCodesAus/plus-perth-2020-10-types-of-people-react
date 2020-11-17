@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import EventCard from "../components/EventCard/EventCard";
 
 const FilterEventsPage = () => {
@@ -15,8 +15,15 @@ const FilterEventsPage = () => {
     const [filterDescription, setFilterDescription] = useState(
         <p>Showing all events</p>
     );
+    const [showFilters, setShowFilters] = useState(false);
     const [showCategories, setShowCategories] = useState(false);
     const [showLocations, setShowLocations] = useState(false);
+
+    // Handling queries from url params
+    const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+    };
+    let query = useQuery().get("category");
 
     // Fetching all events on load
     useEffect(() => {
@@ -32,13 +39,19 @@ const FilterEventsPage = () => {
                 console.log(data);
                 setHasLocation(!data.is_org);
             });
-        fetch(`${process.env.REACT_APP_API_URL}events/`)
-            .then((results) => {
-                return results.json();
-            })
-            .then((data) => {
-                setEventList(data);
-            });
+        // if category query show relevant events
+        if (query) {
+            handleFetch(`events/categories/${query}/events/`);
+            setFilterDescription(<p>Showing all {query} events</p>);
+        } else {
+            fetch(`${process.env.REACT_APP_API_URL}events/`)
+                .then((results) => {
+                    return results.json();
+                })
+                .then((data) => {
+                    setEventList(data);
+                });
+        }
     }, []);
 
     // Function to set the search term
@@ -68,8 +81,9 @@ const FilterEventsPage = () => {
         return response;
     };
 
-    // Function to fetch from endpoint (used by chooseFilter)
+    // Function to fetch from endpoint
     const handleFetch = async (url) => {
+        setShowFilters(false);
         let token = window.localStorage.getItem("token");
         const response = await fetch(`${process.env.REACT_APP_API_URL}${url}`)
             .then((results) => {
@@ -123,7 +137,7 @@ const FilterEventsPage = () => {
         <div id="filter-events-page" className="container">
             <section className="event-list-container">
                 <div>
-                    <div className="filter-options">
+                    <div id="filter-menu">
                         <div className="search-bar">
                             <input
                                 type="text"
@@ -140,127 +154,148 @@ const FilterEventsPage = () => {
                                 <i className="fas fa-search"></i>
                             </button>
                         </div>
-                        <div className="filters">
-                            <button
-                                onClick={() => {
-                                    setShowCategories(!showCategories);
-                                }}
-                            >
-                                Search by Category{" "}
-                                <i className="fas fa-chevron-down"></i>
-                            </button>
-                            <div
-                                className={
-                                    showCategories
-                                        ? `show-buttons`
-                                        : `hide-buttons`
-                                }
-                            >
+                        <div id="more-filters">
+                            <div className="button-container">
                                 <button
-                                    type="button"
-                                    id="HTML"
-                                    name="HTML"
-                                    onClick={chooseFilter}
+                                    onClick={() => setShowFilters(!showFilters)}
                                 >
-                                    HTML
-                                </button>
-                                <button
-                                    type="button"
-                                    id="CSS"
-                                    name="CSS"
-                                    onClick={chooseFilter}
-                                >
-                                    CSS
-                                </button>
-                                <button
-                                    type="button"
-                                    id="Python"
-                                    name="Python"
-                                    onClick={chooseFilter}
-                                >
-                                    Python
-                                </button>
-                                <button
-                                    type="button"
-                                    id="React"
-                                    name="React"
-                                    onClick={chooseFilter}
-                                >
-                                    React
-                                </button>
-                                <button
-                                    type="button"
-                                    id="JavaScript"
-                                    name="JavaScript"
-                                    onClick={chooseFilter}
-                                >
-                                    JavaScript
+                                    Filter <i className="fas fa-filter"></i>
                                 </button>
                             </div>
-                        </div>
-                        {loggedIn && hasLocation ? (
-                            <div className="filters">
-                                <button
-                                    onClick={() => {
-                                        setShowLocations(!showLocations);
-                                    }}
-                                >
-                                    Set km radius{" "}
-                                    <i className="fas fa-chevron-down"></i>
-                                </button>
-                                <div
-                                    className={
-                                        showLocations
-                                            ? `show-buttons`
-                                            : `hide-buttons`
-                                    }
-                                >
-                                    <button
-                                        type="button"
-                                        id="location-filter"
-                                        name="100"
-                                        onClick={chooseFilter}
-                                    >
-                                        &lt;100km
-                                    </button>
-                                    <button
-                                        type="button"
-                                        id="location-filter"
-                                        name="50"
-                                        onClick={chooseFilter}
-                                    >
-                                        &lt;50km
-                                    </button>
-                                    <button
-                                        type="button"
-                                        id="location-filter"
-                                        name="25"
-                                        onClick={chooseFilter}
-                                    >
-                                        &lt;25km
-                                    </button>
+                            {showFilters && (
+                                <div className="filter-options">
+                                    <div className="filters">
+                                        <button
+                                            className="feature-button"
+                                            onClick={() => {
+                                                setShowCategories(
+                                                    !showCategories
+                                                );
+                                            }}
+                                        >
+                                            Skills{" "}
+                                            <i className="fas fa-chevron-down"></i>
+                                        </button>
+                                        <div
+                                            className={
+                                                showCategories
+                                                    ? `show-buttons`
+                                                    : `hide-buttons`
+                                            }
+                                        >
+                                            <button
+                                                type="button"
+                                                id="HTML"
+                                                name="HTML"
+                                                onClick={chooseFilter}
+                                            >
+                                                HTML
+                                            </button>
+                                            <button
+                                                type="button"
+                                                id="CSS"
+                                                name="CSS"
+                                                onClick={chooseFilter}
+                                            >
+                                                CSS
+                                            </button>
+                                            <button
+                                                type="button"
+                                                id="Python"
+                                                name="Python"
+                                                onClick={chooseFilter}
+                                            >
+                                                Python
+                                            </button>
+                                            <button
+                                                type="button"
+                                                id="React"
+                                                name="React"
+                                                onClick={chooseFilter}
+                                            >
+                                                React
+                                            </button>
+                                            <button
+                                                type="button"
+                                                id="JavaScript"
+                                                name="JavaScript"
+                                                onClick={chooseFilter}
+                                            >
+                                                JavaScript
+                                            </button>
+                                        </div>
+                                    </div>
+                                    {loggedIn && hasLocation ? (
+                                        <div className="filters">
+                                            <button
+                                                className="feature-button"
+                                                onClick={() => {
+                                                    setShowLocations(
+                                                        !showLocations
+                                                    );
+                                                }}
+                                            >
+                                                km radius{" "}
+                                                <i className="fas fa-chevron-down"></i>
+                                            </button>
+                                            <div
+                                                className={
+                                                    showLocations
+                                                        ? `show-buttons`
+                                                        : `hide-buttons`
+                                                }
+                                            >
+                                                <button
+                                                    type="button"
+                                                    id="location-filter"
+                                                    name="100"
+                                                    onClick={chooseFilter}
+                                                >
+                                                    &lt;100km
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    id="location-filter"
+                                                    name="50"
+                                                    onClick={chooseFilter}
+                                                >
+                                                    &lt;50km
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    id="location-filter"
+                                                    name="25"
+                                                    onClick={chooseFilter}
+                                                >
+                                                    &lt;25km
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ) : null}
+                                    <div className="filters">
+                                        <button
+                                            className="feature-button"
+                                            type="button"
+                                            id="location-filter"
+                                            name="most-popular"
+                                            onClick={chooseFilter}
+                                        >
+                                            Most Popular
+                                        </button>
+                                    </div>
+                                    <div className="filters">
+                                        <button
+                                            className="feature-button"
+                                            type="button"
+                                            id="all"
+                                            name="all"
+                                            onClick={chooseFilter}
+                                        >
+                                            See all events
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                        ) : null}
-                        <div className="filters">
-                            <button
-                                type="button"
-                                id="location-filter"
-                                name="most-popular"
-                                onClick={chooseFilter}
-                            >
-                                Most Popular
-                            </button>
-                        </div>
-                        <div className="filters">
-                            <button
-                                type="button"
-                                id="all"
-                                name="all"
-                                onClick={chooseFilter}
-                            >
-                                See all events
-                            </button>
+                            )}
                         </div>
                     </div>
                     <div className="info-panel">{filterDescription}</div>
