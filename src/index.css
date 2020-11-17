@@ -27,13 +27,13 @@ li,
 label,
 button,
 i {
-    font-family: var(--font-family-minor);
-    color: var(--dark-color);
-    margin: 0;
+  font-family: var(--font-family-minor);
+  color: var(--dark-color);
+  margin: 0;
 }
 
 a:hover i {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 a {
@@ -105,6 +105,9 @@ i {
   font-size: 1.3rem;
 }
 
+.event-page-bio {
+  text-align: justify;
+}
 /* MARGIN */
 
 .margin-bottom {
@@ -122,7 +125,6 @@ i {
   background-color: inherit;
   transition: background-color 0.4s, color 0.4s;
   font-size: 1rem;
-
 }
 
 .btn-cancel {
