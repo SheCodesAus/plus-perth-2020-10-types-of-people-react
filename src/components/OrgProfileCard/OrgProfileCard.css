@@ -1,79 +1,89 @@
 #o-profile-section-1 {
-    display: flex;
+  display: flex;
 }
 
-#o-profile-left, #o-profile-right {
-    width: 50%;
+#o-profile-left,
+#o-profile-right {
+  width: 50%;
 }
 
 #o-profile-left {
-    text-align: center;
-    padding-right: 10px;
+  text-align: center;
+  padding-right: 10px;
 }
 
 #o-profile-right {
-    display: flex;
-    flex-direction: column;
-    padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+  padding-left: 10px;
 }
 
 #o-profile-image {
-    height: 30vh;
-    width: 100%;
-    object-fit: cover;
+  height: 30vh;
+  width: 100%;
+  object-fit: cover;
 }
 
 #o-profile-section-2,
 #o-profile-section-3 {
-    margin-top: 50px;
+  margin-top: 50px;
+}
+
+/* SPINNER SETTINGS */
+
+#spinner-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 @media only screen and (min-width: 700px) {
-    #o-profile-sections-1-2 {
-        display: flex;
-        align-items: center;
-    }
+  #o-profile-sections-1-2 {
+    display: flex;
+    align-items: center;
+  }
 
-    #o-profile-section-1 {
-        flex-direction: column-reverse;
-    }
+  #o-profile-section-1 {
+    flex-direction: column-reverse;
+  }
 
-    #o-profile-section-1,
-    #o-profile-section-2 {
-        width: 50%;
-    }
-    
-    #o-profile-left, #m-profile-right {
-        width: 100%;
-    }
-    
-    #o-profile-left {
-        text-align: left;
-        padding-right: 10px;
-    }
-    
-    #o-profile-right {
-        display: flex;
-        flex-direction: column;
-        padding-left: 10px;
-    }
-    
-    #o-profile-image {
-        margin-top: 30px;
-        height: 80%;
-        width: 80%;
-        object-fit: cover;
-    }
-    
-    #o-profile-skills-container {
-        display: flex;
-    }
-    
-    #o-profile-skills-container>* {
-        margin-right: 20px;
-    }
+  #o-profile-section-1,
+  #o-profile-section-2 {
+    width: 50%;
+  }
 
-    #o-profile-section-3 {
-        margin-top: 50px;
-    }
+  #o-profile-left,
+  #m-profile-right {
+    width: 100%;
+  }
+
+  #o-profile-left {
+    text-align: left;
+    padding-right: 10px;
+  }
+
+  #o-profile-right {
+    display: flex;
+    flex-direction: column;
+    padding-left: 10px;
+  }
+
+  #o-profile-image {
+    margin-top: 30px;
+    height: 80%;
+    width: 80%;
+    object-fit: cover;
+  }
+
+  #o-profile-skills-container {
+    display: flex;
+  }
+
+  #o-profile-skills-container > * {
+    margin-right: 20px;
+  }
+
+  #o-profile-section-3 {
+    margin-top: 50px;
+  }
 }

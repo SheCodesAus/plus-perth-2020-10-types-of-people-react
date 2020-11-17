@@ -5,6 +5,7 @@ import MentorRegisterForm from "../components/MentorRegisterForm/MentorRegisterF
 import MentorAttendedPage from "./MentorAttendedPage";
 import { Button } from "react-bootstrap";
 import retrieveIcons from "../utilities/retrieveIcons.js";
+import logo from "../Spinner.svg";
 
 const EventPage = () => {
     const { id } = useParams();
@@ -158,7 +159,7 @@ const EventPage = () => {
     return (
         <>
             {isBusy ? (
-                <p>loading</p>
+        <img id="spinner-img" src={logo} alt="loading..." />
             ) : (
                 <div id="event-page" className="container">
                     <IsOwnerCanEdit />

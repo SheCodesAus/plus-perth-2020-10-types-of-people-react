@@ -25,6 +25,11 @@ p,
 small,
 li,
 label,
+button {
+  font-family: var(--font-family-minor);
+  color: var(--dark-color);
+  margin: 0;
+=======
 
 button,
 i {
@@ -122,6 +127,7 @@ i {
   background-color: inherit;
   transition: background-color 0.4s, color 0.4s;
   font-size: 1rem;
+
 }
 
 .btn-cancel {
@@ -206,6 +212,13 @@ i {
   margin-top: 30px;
 }
 
+/* SPINNER SETTINGS */
+
+#spinner-img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
 /* MEDIA QUERIES FOR LARGER SCREENS */
 
 @media only screen and (min-width: 700px) {
