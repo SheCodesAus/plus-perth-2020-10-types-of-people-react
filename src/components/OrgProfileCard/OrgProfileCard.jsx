@@ -108,11 +108,10 @@ const OrgProfileCard = (props) => {
                 <div id="o-profile-sections-1-2">
                   <div id="o-profile-section-1">
                     <div id="o-profile-left">
-                      <h1>{org_profile.company_name}</h1>
+                      <IsOwnerCanEdit />
                       <h3>{org_profile.username}</h3>
                       <h5>Contact person: {org_profile.contact_name}</h5>
                       <h5>{org_profile.email}</h5>
-                      <IsOwnerCanEdit />
                     </div>
                     <div id="o-profile-right">
                       <img
@@ -123,6 +122,8 @@ const OrgProfileCard = (props) => {
                     </div>
                   </div>
                   <div id="o-profile-section-2">
+                    <h1>{org_profile.company_name}</h1>
+
                     <h3>Bio</h3>
                     <p>{org_profile.org_bio}</p>
                   </div>

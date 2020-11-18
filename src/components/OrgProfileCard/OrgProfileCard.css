@@ -24,6 +24,10 @@
   object-fit: cover;
 }
 
+#o-profile-section-2 {
+  text-align: justify;
+}
+
 #o-profile-section-2,
 #o-profile-section-3 {
   margin-top: 50px;
