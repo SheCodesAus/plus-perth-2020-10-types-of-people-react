@@ -190,7 +190,7 @@ const EventPage = () => {
           <div id="event-page-image">
             <img src={eventData.event_image} alt="event image" />
           </div>
-          <div>
+          <div class="icons">
             {retrieveIcons(eventData.categories).map((icon) => (
               <>{icon}</>
             ))}
